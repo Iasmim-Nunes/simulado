@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Material de estudo para a prova de APEX: 12 codigos em C para completar e explicar, cobrindo funcoes, recursividade, ponteiros, parametros e matrizes.">
+<meta name="description" content="Material de estudo para a prova de APEX: 14 codigos em C++ para completar e explicar, cobrindo funcoes, recursividade, ponteiros, parametros e matrizes.">
 <style>
   :root{
     color-scheme: light dark;
@@ -14,7 +14,7 @@
   img{max-width:100%}
   [hidden]{display:none!important}
 </style>
-<title>Simulado APEX em C</title>
+<title>Simulado APEX em C++</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
@@ -147,6 +147,10 @@
   h2{font-size:25px;letter-spacing:-.02em;margin:0;font-weight:700;text-wrap:balance}
   .sec-sub{font-family:var(--serif);color:var(--muted);margin:0 0 26px;max-width:62ch;font-size:16px}
   h3{font-size:17px;margin:0 0 6px;letter-spacing:-.01em;font-weight:600}
+  .bloco{
+    font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin:34px 0 14px;padding-bottom:6px;border-bottom:1px solid var(--line);
+  }
 
   p{max-width:65ch}
   .prose{font-family:var(--serif);font-size:16.5px}
@@ -224,9 +228,7 @@
   button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .verdict{font-family:var(--mono);font-size:12.5px;margin-left:2px;align-self:center}
 
-  .sol{
-    margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);
-  }
+  .sol{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
   .sol h4{
     font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
     color:var(--ok);margin:0 0 10px;
@@ -242,9 +244,7 @@
 
   /* ---------- listas ---------- */
   ul.clean{list-style:none;padding:0;margin:0}
-  ul.clean li{
-    padding:12px 0;border-bottom:1px solid var(--line);font-size:15px;
-  }
+  ul.clean li{padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}
   ul.clean li:last-child{border-bottom:none}
   ul.clean li b{display:block;margin-bottom:3px}
   .bad{color:var(--err);font-family:var(--mono);font-size:12.5px}
@@ -263,10 +263,12 @@
   .check input:checked + span{color:var(--muted);text-decoration:line-through}
 
   table{border-collapse:collapse;width:100%;font-size:14.5px}
-  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface);margin-bottom:16px}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface);margin:0 0 16px;box-shadow:var(--shadow)}
   th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
   th{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
   tr:last-child td{border-bottom:none}
+  td code{white-space:pre}
+  td b{display:block;margin-bottom:2px}
 
   footer{
     border-top:2px solid var(--ink);padding-top:18px;color:var(--muted);
@@ -287,90 +289,144 @@
       <a href="#erros">Erros</a>
       <a href="#checklist">Checklist</a>
     </nav>
-    <div class="score" id="score">lacunas: <b>0</b> / 49</div>
+    <div class="score" id="score">lacunas: <b>0</b> / 56</div>
   </div>
 </header>
 
 <div class="wrap">
 
   <div class="hero">
-    <p class="eyebrow">Vetores · Matrizes · Recursão · Ponteiros</p>
+    <p class="eyebrow">C++ · Funções · Recursão · Ponteiros · Matrizes</p>
     <h1>Complete o código. Depois explique o que ele faz.</h1>
-    <p class="lead">Doze programas em C no mesmo formato da prova: o código chega com lacunas numeradas, você preenche, confere e só então abre o gabarito — que traz as respostas <strong>e</strong> a explicação por escrito, porque na prova as duas coisas valem nota. As questões 1 a 5 são exatamente as da lista do professor; as 6 a 12 cobrem o resto da matéria pelo mesmo caminho.</p>
+    <p class="lead">Catorze programas em C++ no formato da prova: o código chega com lacunas numeradas, você preenche, confere e só então abre o gabarito — que traz as respostas <strong>e</strong> a explicação por escrito, porque na prova as duas coisas valem nota. Tudo escrito no estilo do professor: <code>#include&lt;iostream&gt;</code>, funções definidas antes da <code>main</code> sem protótipo, <code>cin</code>/<code>cout</code> e o comentário <code>//caso base ou trivial</code> marcando a parada da recursão.</p>
     <div class="meta">
-      <span class="tag">12 questões</span>
-      <span class="tag">49 lacunas</span>
+      <span class="tag">14 questões</span>
+      <span class="tag">56 lacunas</span>
       <span class="tag">5 traces para explicar</span>
-      <span class="tag">linguagem C</span>
+      <span class="tag">estilo do professor</span>
     </div>
   </div>
 
   <!-- ====================== 1. BASE ====================== -->
   <section id="base">
     <div class="sec-head"><span class="sec-num">01</span><h2>A base que cai em toda questão</h2></div>
-    <p class="sec-sub">Seis ideias. Se as seis estiverem firmes, qualquer código da lista sai — inclusive os que o professor inventar na hora.</p>
+    <p class="sec-sub">Começa pela moldura que o professor montou no <code>func1.cpp</code> — os quatro tipos de função. Toda questão da prova é um desses quatro casos, com recursão por dentro.</p>
 
-    <div class="concepts">
+    <h3>Os 4 tipos de função</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Tipo</th><th>Recebe?</th><th>Devolve?</th><th>Exemplo</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>1º</b></td><td>não</td><td>não</td>
+            <td><code>void escreve(void)</code><br><span class="cm">só imprime na tela</span></td>
+          </tr>
+          <tr>
+            <td><b>2º</b></td><td>sim</td><td>não</td>
+            <td><code>void soma(int a, int b)</code><br><span class="cm">recebe da main, imprime o resultado</span></td>
+          </tr>
+          <tr>
+            <td><b>3º</b></td><td>sim</td><td>sim</td>
+            <td><code>int mult(int a, int b)</code><br><span class="cm">o mais comum: recebe, calcula, devolve</span></td>
+          </tr>
+          <tr>
+            <td><b>4º</b></td><td>não</td><td>sim</td>
+            <td><code>int aleatorio(void)</code><br><span class="cm">não precisa de dado, mas produz um</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">As funções recursivas da lista são quase todas do <strong>3º tipo</strong> — recebem o vetor ou a matriz, o tamanho e um índice de controle, e devolvem um número. As duas exceções são a de troca e a de mínimo/máximo, que devolvem pelo ponteiro e por isso são do 2º tipo.</p>
+
+    <div class="concepts" style="margin-top:26px">
 
       <div class="concept">
-        <h3><span class="k">FUNÇÃO</span> Assinatura</h3>
-        <p>Uma função é <strong>tipo de retorno + nome + parâmetros</strong>. O protótipo antes da <code>main</code> avisa o compilador que ela existe; a definição pode vir depois.</p>
-<pre><code><span class="kw">int</span> soma(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i);  <span class="cm">/* protótipo */</span>
+        <h3><span class="k">ORDEM</span> Função antes da main</h3>
+        <p>O professor <strong>define as funções acima da <code>main</code></strong> e não usa protótipo. Funciona porque, quando a <code>main</code> chama, a função já foi lida. Protótipo só é necessário se a definição vier depois.</p>
+<pre><code><span class="kw">#include</span>&lt;iostream&gt;
+<span class="kw">using namespace</span> std;
 
-<span class="kw">int</span> main(<span class="kw">void</span>) { ... }
-
-<span class="kw">int</span> soma(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i) { ... }</code></pre>
+<span class="kw">int</span> fatorial(<span class="kw">int</span> n){   <span class="cm">//primeiro a função</span>
+	...
+}
+<span class="kw">int</span> main(){            <span class="cm">//depois a main</span>
+	...
+}</code></pre>
       </div>
 
       <div class="concept">
         <h3><span class="k">PARÂMETRO</span> Valor × referência</h3>
-        <p>Por valor, a função recebe uma <strong>cópia</strong> e não altera o original. Para alterar, passe o <strong>endereço</strong> e use <code>*</code> dentro da função.</p>
-<pre><code><span class="kw">void</span> dobra(<span class="kw">int</span> x)  { x = x * <span class="st">2</span>; }   <span class="cm">/* nada muda */</span>
-<span class="kw">void</span> dobraP(<span class="kw">int</span> *x) { *x = *x * <span class="st">2</span>; } <span class="cm">/* muda */</span>
+        <p>Por valor, a função recebe uma <strong>cópia</strong>. Para alterar o original, C++ oferece dois caminhos: ponteiro ou <strong>referência</strong>, com <code>&amp;</code> no parâmetro.</p>
+<pre><code><span class="kw">void</span> dobra (<span class="kw">int</span> x){ x = x*<span class="st">2</span>; }   <span class="cm">//nada muda </span>
+<span class="kw">void</span> dobraP(<span class="kw">int</span> *x){ *x = *x*<span class="st">2</span>; } <span class="cm">//ponteiro  </span>
+<span class="kw">void</span> dobraR(<span class="kw">int</span> &amp;x){ x = x*<span class="st">2</span>; }   <span class="cm">//referencia</span>
 
-dobra(v);    <span class="cm">/* v continua 5  */</span>
-dobraP(&amp;v);  <span class="cm">/* v virou 10    */</span></code></pre>
+dobra(v);    <span class="cm">//v continua 5</span>
+dobraP(&amp;v);  <span class="cm">//v virou 10  </span>
+dobraR(v);   <span class="cm">//v virou 20  </span></code></pre>
       </div>
 
       <div class="concept">
         <h3><span class="k">PONTEIRO</span> Os três símbolos</h3>
-        <p><code>int *p</code> declara. <code>&amp;x</code> é o endereço de <code>x</code>. <code>*p</code> é o valor guardado no endereço. Ponteiro também serve para <strong>devolver mais de um resultado</strong>.</p>
+        <p><code>int *p</code> declara. <code>&amp;x</code> é o endereço de <code>x</code>. <code>*p</code> é o valor guardado nesse endereço. Ponteiro também serve para <strong>devolver mais de um resultado</strong>.</p>
 <pre><code><span class="kw">int</span> x = <span class="st">7</span>;
-<span class="kw">int</span> *p = &amp;x;   <span class="cm">/* p aponta para x  */</span>
-*p = <span class="st">9</span>;        <span class="cm">/* x agora vale 9   */</span>
-p++;           <span class="cm">/* anda 1 int adiante */</span></code></pre>
+<span class="kw">int</span> *p = &amp;x;   <span class="cm">//p aponta para x</span>
+*p = <span class="st">9</span>;        <span class="cm">//x agora vale 9</span>
+p++;           <span class="cm">//anda 1 int adiante</span></code></pre>
       </div>
 
       <div class="concept">
         <h3><span class="k">VETOR</span> Já é um ponteiro</h3>
-        <p>O nome do vetor <strong>é</strong> o endereço do primeiro elemento. Por isso <code>soma(vetor, n)</code> não leva <code>&amp;</code>, e alterações dentro da função valem lá fora.</p>
-<pre><code><span class="kw">int</span> soma(<span class="kw">int</span> v[], <span class="kw">int</span> n);   <span class="cm">/* idênticos */</span>
+        <p>O nome do vetor <strong>é</strong> o endereço do primeiro elemento. Por isso <code>soma(vetor,n)</code> não leva <code>&amp;</code>, e alterações dentro da função valem lá fora.</p>
+<pre><code><span class="kw">int</span> soma(<span class="kw">int</span> v[], <span class="kw">int</span> n);   <span class="cm">//identicos</span>
 <span class="kw">int</span> soma(<span class="kw">int</span> *v, <span class="kw">int</span> n);
 
-soma(vetor, <span class="st">10</span>);   <span class="cm">/* sem &amp; */</span>
-<span class="cm">/* v[i]  ==  *(v + i) */</span></code></pre>
+soma(vetor,<span class="st">10</span>);   <span class="cm">//sem &amp;</span>
+<span class="cm">//v[i]  ==  *(v+i)</span></code></pre>
       </div>
 
       <div class="concept">
         <h3><span class="k">MATRIZ</span> A 2ª dimensão é obrigatória</h3>
-        <p>O compilador precisa saber o tamanho da linha para calcular o endereço. Com ordem digitada, passe <code>n</code> <strong>antes</strong> da matriz (VLA) — <code>int m[][]</code> não compila.</p>
-<pre><code><span class="kw">int</span> f(<span class="kw">int</span> n, <span class="kw">int</span> m[n][n], <span class="kw">int</span> i);  <span class="cm">/* VLA  */</span>
-<span class="kw">int</span> g(<span class="kw">int</span> m[][<span class="st">12</span>], <span class="kw">int</span> n);        <span class="cm">/* fixa */</span>
-<span class="cm">/* int h(int m[][], int n);  ERRO */</span></code></pre>
+        <p>O compilador precisa saber o tamanho da linha para achar o endereço, e em C++ esse tamanho tem de ser <strong>constante</strong>. Declare um <code>MAX</code> e use só o quadrado de lado <code>n</code>.</p>
+<pre><code><span class="kw">const int</span> MAX = <span class="st">20</span>;
+
+<span class="kw">int</span> f(<span class="kw">int</span> m[][MAX], <span class="kw">int</span> n, <span class="kw">int</span> i);  <span class="cm">//ok</span>
+<span class="cm">//int g(int m[][],  int n);  ERRO</span>
+<span class="cm">//int h(int n, int m[n][n]); nao e C++</span></code></pre>
       </div>
 
       <div class="concept">
         <h3><span class="k">RECURSÃO</span> Duas partes, sempre</h3>
-        <p><strong>Caso base</strong>: quando parar e o que devolver. <strong>Passo recursivo</strong>: resolve um pedacinho e chama a si mesma com o problema <em>menor</em>. Sem o base, estouro de pilha.</p>
-<pre><code><span class="kw">int</span> soma(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i) {
-    <span class="kw">if</span> (i == n) <span class="kw">return</span> <span class="st">0</span>;      <span class="cm">/* base  */</span>
-    <span class="kw">return</span> v[i] + soma(v, n, i+<span class="st">1</span>); <span class="cm">/* passo */</span>
+        <p><strong>Caso base</strong>: quando parar e o que devolver. <strong>Chamada recursiva</strong>: resolve um pedacinho e chama a si mesma com o problema <em>menor</em>. Sem o base, estouro de pilha.</p>
+<pre><code><span class="kw">int</span> fatorial(<span class="kw">int</span> n){
+	<span class="kw">if</span>(n==<span class="st">0</span>)<span class="cm">//caso base ou trivial</span>
+		<span class="kw">return</span> <span class="st">1</span>;
+	<span class="kw">return</span> n*fatorial(n-<span class="st">1</span>);<span class="cm">//chamada recursiva</span>
 }</code></pre>
       </div>
 
     </div>
 
-    <p class="prose" style="margin-top:22px"><strong>O truque que resolve a matriz sem laço:</strong> em vez de dois índices, use um contador linear <code>pos</code> que vai de <code>0</code> até <code>n*n - 1</code>. A linha é <code>pos / n</code> e a coluna é <code>pos % n</code>. Uma única recursão varre a matriz inteira, indo de coluna em coluna e pulando de linha quando acaba — exatamente o percurso que o enunciado da Questão 4 pede.</p>
+    <h3 style="margin-top:30px">A lista está escrita em C — o que muda na sua prova</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Assunto</th><th>Como está na lista (C)</th><th>Como você escreve (C++)</th></tr></thead>
+        <tbody>
+          <tr><td>Cabeçalho</td><td><code>#include &lt;stdio.h&gt;</code></td><td><code>#include&lt;iostream&gt;</code><br><code>using namespace std;</code></td></tr>
+          <tr><td>Saída</td><td><code>printf("%d ", x);</code></td><td><code>cout&lt;&lt;x&lt;&lt;" ";</code></td></tr>
+          <tr><td>Entrada</td><td><code>scanf("%d", &amp;n);</code></td><td><code>cin&gt;&gt;n;</code> <em>(sem o <code>&amp;</code>)</em></td></tr>
+          <tr><td>Constante de tamanho</td><td><code>#define TAM 10</code></td><td><code>const int TAM = 10;</code></td></tr>
+          <tr><td>Matriz de ordem digitada</td><td><code>int m[n][n]</code> (VLA)</td><td><code>int m[MAX][MAX]</code> e usa só <code>n</code> × <code>n</code></td></tr>
+          <tr><td>Matriz como parâmetro</td><td><code>f(int n, int m[n][n], int i)</code></td><td><code>f(int m[][MAX], int n, int i)</code></td></tr>
+          <tr><td>Alinhar a matriz</td><td><code>printf("%4d", m[i][j]);</code></td><td><code>cout&lt;&lt;setw(4)&lt;&lt;m[i][j];</code></td></tr>
+          <tr><td>Casas decimais</td><td><code>printf("%.2f", x);</code></td><td><code>cout&lt;&lt;fixed&lt;&lt;setprecision(2)&lt;&lt;x;</code></td></tr>
+          <tr><td>Alterar o original</td><td>só ponteiro</td><td>ponteiro <strong>ou</strong> referência (<code>int &amp;x</code>)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">A recursão em si não muda uma vírgula: caso base, chamada recursiva e índice de controle são idênticos nas duas linguagens. O que muda é a moldura em volta — entrada, saída e a declaração da matriz.</p>
+
+    <p class="prose" style="margin-top:18px"><strong>O truque que resolve a matriz sem laço:</strong> em vez de dois índices, use um contador linear <code>pos</code> que vai de <code>0</code> até <code>n*n-1</code>. A linha é <code>pos/n</code> e a coluna é <code>pos%n</code>. Uma única recursão varre a matriz inteira, indo de coluna em coluna e pulando de linha quando acaba — exatamente o percurso que o enunciado da Questão 4 da lista pede.</p>
   </section>
 
   <!-- ====================== 2. BLOCOS ====================== -->
@@ -378,28 +434,37 @@ soma(vetor, <span class="st">10</span>);   <span class="cm">/* sem &amp; */</spa
     <div class="sec-head"><span class="sec-num">02</span><h2>Blocos prontos para a <code style="font-size:.8em">main</code></h2></div>
     <p class="sec-sub">A prova cobra recursão, mas você perde tempo (e ponto) na entrada e na exibição. Decore estes quatro pedaços — eles reaparecem em todas as questões.</p>
 
-<pre><code><span class="cm">/* 1. vetor de inteiros aleatórios em [min, max] */</span>
-srand(time(<span class="kw">NULL</span>));                      <span class="cm">/* uma única vez, no início */</span>
-<span class="kw">for</span> (i = <span class="st">0</span>; i &lt; TAM; i++)
-    vetor[i] = min + rand() % (max - min + <span class="st">1</span>);
+<pre><code><span class="kw">#include</span>&lt;iostream&gt;
+<span class="kw">#include</span>&lt;iomanip&gt;    <span class="cm">//setw, setprecision</span>
+<span class="kw">#include</span>&lt;cstdlib&gt;    <span class="cm">//rand, srand</span>
+<span class="kw">#include</span>&lt;ctime&gt;      <span class="cm">//time</span>
+<span class="kw">using namespace</span> std;
 
-<span class="cm">/* 2. vetor de reais aleatórios em [min, max] */</span>
-<span class="kw">for</span> (i = <span class="st">0</span>; i &lt; TAM; i++)
-    vetor[i] = min + ((<span class="kw">float</span>)rand() / RAND_MAX) * (max - min);
+<span class="cm">//1. vetor de inteiros aleatorios na faixa de min a max</span>
+srand(time(<span class="kw">NULL</span>));                    <span class="cm">//uma unica vez, no inicio</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=<span class="st">0</span>;i&lt;TAM;i++)
+	vetor[i] = min + rand()%(max-min+<span class="st">1</span>);
 
-<span class="cm">/* 3. ler a ordem e preencher uma matriz quadrada (VLA) */</span>
-printf(<span class="st">"Ordem da matriz: "</span>);
-scanf(<span class="st">"%d"</span>, &amp;n);                          <span class="cm">/* &amp; obrigatório no scanf */</span>
-<span class="kw">int</span> m[n][n];                              <span class="cm">/* declarada DEPOIS de ler n */</span>
-<span class="kw">for</span> (i = <span class="st">0</span>; i &lt; n; i++)
-    <span class="kw">for</span> (j = <span class="st">0</span>; j &lt; n; j++)
-        m[i][j] = <span class="st">0</span> + rand() % <span class="st">10</span>;
+<span class="cm">//2. vetor de reais aleatorios na faixa de min a max</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=<span class="st">0</span>;i&lt;TAM;i++)
+	vetor[i] = min + ((<span class="kw">float</span>)rand()/RAND_MAX)*(max-min);
 
-<span class="cm">/* 4. exibir no formato de matriz */</span>
-<span class="kw">for</span> (i = <span class="st">0</span>; i &lt; n; i++) {
-    <span class="kw">for</span> (j = <span class="st">0</span>; j &lt; n; j++)
-        printf(<span class="st">"%4d"</span>, m[i][j]);          <span class="cm">/* largura fixa alinha as colunas */</span>
-    printf(<span class="st">"\n"</span>);                        <span class="cm">/* quebra ao fim de cada linha */</span>
+<span class="cm">//3. ler a ordem e preencher a matriz quadrada</span>
+<span class="kw">const int</span> MAX = <span class="st">20</span>;                  <span class="cm">//teto fixo, exigido pelo C++</span>
+<span class="kw">int</span> m[MAX][MAX],n;
+
+cout&lt;&lt;<span class="st">"Informe a ordem da matriz "</span>;
+cin&gt;&gt;n;                                <span class="cm">//sem &amp; no cin</span>
+
+<span class="kw">for</span>(<span class="kw">int</span> i=<span class="st">0</span>;i&lt;n;i++)
+	<span class="kw">for</span>(<span class="kw">int</span> j=<span class="st">0</span>;j&lt;n;j++)
+		m[i][j] = rand()%<span class="st">10</span>;
+
+<span class="cm">//4. exibir no formato de matriz</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=<span class="st">0</span>;i&lt;n;i++){
+	<span class="kw">for</span>(<span class="kw">int</span> j=<span class="st">0</span>;j&lt;n;j++)
+		cout&lt;&lt;setw(<span class="st">4</span>)&lt;&lt;m[i][j];      <span class="cm">//largura fixa alinha as colunas</span>
+	cout&lt;&lt;endl;                        <span class="cm">//quebra ao fim de cada linha</span>
 }</code></pre>
 
     <p class="prose">Laço na <code>main</code> pode. O enunciado só proíbe <code>for</code>, <code>while</code> e <code>do...while</code> <strong>dentro das funções recursivas</strong>. Preencher e exibir com laço na <code>main</code> é o esperado.</p>
@@ -410,37 +475,46 @@ scanf(<span class="st">"%d"</span>, &amp;n);                          <span clas
     <div class="sec-head"><span class="sec-num">03</span><h2>Simulado — complete e explique</h2></div>
     <p class="sec-sub">Preencha as lacunas, clique em <em>Conferir</em> e só depois abra o gabarito. Escreva a explicação num papel antes de ler a minha: é essa parte que costuma valer metade da questão.</p>
 
+    <p class="bloco">Bloco A · funções e parâmetros — as aulas do professor</p>
+
     <!-- Q1 -->
     <article class="q" data-q="1">
-      <div class="q-head"><span class="q-num">01</span><h3 class="q-title">Soma dos elementos de um vetor</h3><span class="q-src">Lista · Questão 1</span></div>
-      <p class="q-task">Preencher um vetor de 10 inteiros aleatórios de 0 a 9 e somar tudo com uma função recursiva. <strong>Explique</strong> qual é o caso base e por que a função precisa do índice <code>i</code>.</p>
-<pre><code><span class="kw">#include</span> &lt;stdio.h&gt;
-<span class="kw">#include</span> &lt;stdlib.h&gt;
-<span class="kw">#include</span> &lt;time.h&gt;
-<span class="kw">#define</span> TAM <span class="st">10</span>
+      <div class="q-head"><span class="q-num">01</span><h3 class="q-title">Os quatro tipos de função</h3><span class="q-src">func1.cpp</span></div>
+      <p class="q-task">O programa da aula, com os quatro tipos numa tela só. <strong>Explique</strong> a diferença entre <code>soma</code> e <code>mult</code> — as duas calculam, mas só uma devolve.</p>
+<pre><code><span class="kw">#include</span>&lt;iostream&gt;
+<span class="kw">#include</span>&lt;cstdlib&gt;
+<span class="kw">#include</span>&lt;ctime&gt;
+<span class="kw">using namespace</span> std;
 
-<span class="kw">int</span> somaVetor(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i);
-
-<span class="kw">int</span> main(<span class="kw">void</span>) {
-    <span class="kw">int</span> vetor[TAM], i;
-
-    srand(time(<span class="kw">NULL</span>));
-
-    <span class="kw">for</span> (i = <span class="st">0</span>; i &lt; TAM; i++)
-        vetor[i] = rand() % <span class="lb">1</span><input class="bl" id="q1b1" size="3" data-a="10" aria-label="lacuna 1">;   <span class="cm">/* faixa de 0 a 9 */</span>
-
-    printf(<span class="st">"Vetor: "</span>);
-    <span class="kw">for</span> (i = <span class="st">0</span>; i &lt; TAM; i++)
-        printf(<span class="st">"%d "</span>, vetor[i]);
-
-    printf(<span class="st">"\nSoma = %d\n"</span>, somaVetor(vetor, TAM, <span class="lb">2</span><input class="bl" id="q1b2" size="3" data-a="0" aria-label="lacuna 2">));
-    <span class="kw">return</span> <span class="st">0</span>;
+<span class="cm">//1o tipo: nao recebe parametro e nao retorna valor</span>
+<span class="lb">1</span><input class="bl" id="q1b1" size="5" data-a="void" aria-label="lacuna 1"> escreve(<span class="kw">void</span>){
+	cout&lt;&lt;<span class="st">"Hoje e quinta feira"</span>&lt;&lt;endl;
 }
-
-<span class="kw">int</span> somaVetor(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i) {
-    <span class="kw">if</span> (i <span class="lb">3</span><input class="bl" id="q1b3" size="3" data-a="==|&gt;=" aria-label="lacuna 3"> n)                <span class="cm">/* caso base */</span>
-        <span class="kw">return</span> <span class="lb">4</span><input class="bl" id="q1b4" size="3" data-a="0" aria-label="lacuna 4">;
-    <span class="kw">return</span> v[i] + somaVetor(v, n, <span class="lb">5</span><input class="bl" id="q1b5" size="5" data-a="i+1" aria-label="lacuna 5">);
+<span class="cm">//2o tipo: recebe parametro do main e nao retorna valor</span>
+<span class="kw">void</span> soma(<span class="kw">int</span> a, <span class="kw">int</span> b){
+	<span class="kw">int</span> s;
+	s = a + b;
+	cout&lt;&lt;<span class="st">"Soma de "</span>&lt;&lt;a&lt;&lt;<span class="st">" + "</span>&lt;&lt;b&lt;&lt;<span class="st">" = "</span>&lt;&lt;s&lt;&lt;endl;
+}
+<span class="cm">//3o tipo: recebe parametro do main e retorna valor p main</span>
+<span class="kw">int</span> mult(<span class="kw">int</span> a, <span class="kw">int</span> b){
+	<span class="kw">int</span> m;
+	m = a * b;
+	<span class="lb">2</span><input class="bl" id="q1b2" size="7" data-a="return" aria-label="lacuna 2"> m;
+}
+<span class="cm">//4o tipo: nao recebe parametro do main mas retorna valor p main</span>
+<span class="kw">int</span> aleatorio(<span class="kw">void</span>){
+	<span class="kw">return</span>(rand()%<span class="lb">3</span><input class="bl" id="q1b3" size="3" data-a="10" aria-label="lacuna 3">);<span class="cm">//faixa de 0 a 9</span>
+}
+<span class="kw">int</span> main(){
+	<span class="kw">int</span> x=<span class="st">3</span>,y=<span class="st">5</span>,mu,ale;
+	srand(time(<span class="lb">4</span><input class="bl" id="q1b4" size="6" data-a="NULL|0" aria-label="lacuna 4">));
+	escreve();
+	soma(y,x);
+	mu = <span class="lb">5</span><input class="bl" id="q1b5" size="10" data-a="mult(x,y)|mult(y,x)" aria-label="lacuna 5">;
+	cout&lt;&lt;<span class="st">"Multipl de "</span>&lt;&lt;x&lt;&lt;<span class="st">" x "</span>&lt;&lt;y&lt;&lt;<span class="st">" = "</span>&lt;&lt;mu&lt;&lt;endl;
+	ale = aleatorio();
+	cout&lt;&lt;<span class="st">"Numero gerado "</span>&lt;&lt;ale&lt;&lt;endl;
 }</code></pre>
       <div class="actions">
         <button class="primary" data-check="1">Conferir</button>
@@ -450,44 +524,46 @@ scanf(<span class="st">"%d"</span>, &amp;n);                          <span clas
       <div class="sol" id="s1" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
-          <span class="key"><i>1</i>10</span><span class="key"><i>2</i>0</span><span class="key"><i>3</i>==</span><span class="key"><i>4</i>0</span><span class="key"><i>5</i>i + 1</span>
+          <span class="key"><i>1</i>void</span><span class="key"><i>2</i>return</span><span class="key"><i>3</i>10</span><span class="key"><i>4</i>NULL</span><span class="key"><i>5</i>mult(x,y)</span>
         </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> sorteia 10 inteiros entre 0 e 9, mostra o vetor e devolve a soma de todos os elementos usando recursão.</p>
-          <p><strong>Por que <code>rand() % 10</code>:</strong> o resto da divisão por 10 só pode dar 0, 1, … 9 — exatamente a faixa pedida. Para uma faixa de <code>a</code> a <code>b</code>, a fórmula geral é <code>a + rand() % (b - a + 1)</code>.</p>
-          <p><strong>O índice <code>i</code>:</strong> é o parâmetro de controle. Sem laço, é ele que marca onde a varredura está; cada chamada avança uma posição. A primeira chamada parte de <code>0</code>.</p>
-          <p><strong>Caso base:</strong> quando <code>i == n</code> o índice passou do último elemento válido (<code>n - 1</code>), não há mais nada para somar e a função devolve <code>0</code> — o elemento neutro da soma. Devolver qualquer outro número estragaria o total.</p>
-          <p><strong>Passo recursivo:</strong> <code>v[i] + somaVetor(v, n, i + 1)</code> soma o elemento atual com a soma de todo o resto. As chamadas empilham até o caso base e os valores vão sendo somados na volta: <code>v[0] + (v[1] + (v[2] + … + 0))</code>.</p>
+          <p><strong>O que o código faz:</strong> demonstra os quatro tipos de função. Escreve uma frase, soma e imprime, multiplica e devolve, e sorteia um número de 0 a 9.</p>
+          <p><strong><code>soma</code> × <code>mult</code>:</strong> as duas recebem <code>a</code> e <code>b</code> e calculam. A diferença é o destino do resultado. <code>soma</code> é <code>void</code>: imprime ali mesmo e o valor se perde — a <code>main</code> não consegue reaproveitá-lo. <code>mult</code> é <code>int</code>: devolve o resultado com <code>return</code>, e por isso a <code>main</code> precisa de uma variável (<code>mu</code>) para guardar o que voltou. Guardar o valor é o que permite usá-lo depois numa conta, numa comparação ou noutra função.</p>
+          <p><strong><code>void</code> nos dois lugares:</strong> antes do nome significa "não devolve nada". Dentro dos parênteses, como em <code>escreve(void)</code>, significa "não recebe nada" — em C++ também se pode deixar os parênteses vazios.</p>
+          <p><strong><code>srand(time(NULL))</code>:</strong> alimenta o sorteador com o relógio, para os números mudarem a cada execução. Sem ele, <code>rand()</code> devolve sempre a mesma sequência. Vai uma vez só, no início da <code>main</code>.</p>
+          <p><strong>Nenhum protótipo:</strong> as quatro funções estão definidas antes da <code>main</code>, então o compilador já as conhece quando chega na chamada. Se você mover qualquer uma para depois da <code>main</code>, aí sim precisa declarar o protótipo no topo.</p>
         </div>
       </div>
     </article>
 
     <!-- Q2 -->
     <article class="q" data-q="2">
-      <div class="q-head"><span class="q-num">02</span><h3 class="q-title">Maior elemento e sua primeira posição</h3><span class="q-src">Lista · Questão 2</span></div>
-      <p class="q-task">15 números reais entre 12.3 e 25.7. A função recursiva devolve o <strong>índice</strong> do maior valor — e, em caso de empate, o índice da <strong>primeira</strong> ocorrência. <strong>Explique</strong> qual comparação garante isso.</p>
-<pre><code><span class="kw">#define</span> TAM <span class="st">15</span>
-
-<span class="kw">int</span> indiceDoMaior(<span class="kw">float</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i) {
-    <span class="kw">int</span> idxResto;
-
-    <span class="kw">if</span> (i == <span class="lb">1</span><input class="bl" id="q2b1" size="5" data-a="n-1" aria-label="lacuna 1">)              <span class="cm">/* sobrou só o último */</span>
-        <span class="kw">return</span> i;
-
-    idxResto = indiceDoMaior(v, n, <span class="lb">2</span><input class="bl" id="q2b2" size="5" data-a="i+1" aria-label="lacuna 2">);
-
-    <span class="kw">if</span> (v[i] <span class="lb">3</span><input class="bl" id="q2b3" size="3" data-a="&gt;=" aria-label="lacuna 3"> v[idxResto])       <span class="cm">/* empate fica com o atual */</span>
-        <span class="kw">return</span> <span class="lb">4</span><input class="bl" id="q2b4" size="3" data-a="i" aria-label="lacuna 4">;
-
-    <span class="kw">return</span> idxResto;
+      <div class="q-head"><span class="q-num">02</span><h3 class="q-title">De iterativo para recursivo</h3><span class="q-src">fatit.cpp · fatrecurs.cpp</span></div>
+      <p class="q-task">À esquerda o fatorial com <code>while</code>, à direita o mesmo fatorial em recursão. <strong>Explique</strong> o que, na versão recursiva, faz o papel do <code>while</code>.</p>
+<pre><code><span class="cm">//---------- versao iterativa (fatit.cpp) ----------</span>
+<span class="kw">int</span> fatorial(<span class="kw">int</span> n){
+	<span class="kw">int</span> fat = <span class="st">1</span>;
+	<span class="kw">while</span>(n&gt;<span class="st">1</span>){
+		fat *= n;
+		n--;
+	}
+	<span class="kw">return</span> fat;
 }
 
-<span class="cm">/* --- na main --- */</span>
-<span class="kw">for</span> (i = <span class="st">0</span>; i &lt; TAM; i++)
-    vetor[i] = <span class="st">12.3</span> + ((<span class="kw">float</span>)rand() / RAND_MAX) * (<span class="lb">5</span><input class="bl" id="q2b5" size="11" data-a="25.7-12.3|13.4" aria-label="lacuna 5">);
+<span class="cm">//---------- versao recursiva: complete ----------</span>
+<span class="kw">int</span> fatorial(<span class="kw">int</span> n){
+	<span class="kw">if</span>(n==<span class="lb">1</span><input class="bl" id="q2b1" size="3" data-a="0" aria-label="lacuna 1">)<span class="cm">//caso base ou trivial</span>
+		<span class="kw">return</span> <span class="lb">2</span><input class="bl" id="q2b2" size="3" data-a="1" aria-label="lacuna 2">;
+	<span class="kw">return</span> n*fatorial(<span class="lb">3</span><input class="bl" id="q2b3" size="5" data-a="n-1" aria-label="lacuna 3">);<span class="cm">//chamada recursiva</span>
+}
 
-pos = indiceDoMaior(vetor, TAM, <span class="lb">6</span><input class="bl" id="q2b6" size="3" data-a="0" aria-label="lacuna 6">);
-printf(<span class="st">"Maior = %.2f na posicao %d\n"</span>, vetor[pos], pos);</code></pre>
+<span class="kw">int</span> main(){
+	<span class="kw">int</span> f,num;
+	cout&lt;&lt;<span class="st">"Informe o valor "</span>;
+	cin&gt;&gt;num;
+	f = fatorial(num);
+	cout&lt;&lt;<span class="st">"Fatorial de "</span>&lt;&lt;num&lt;&lt;<span class="st">" = "</span>&lt;&lt;f;
+}</code></pre>
       <div class="actions">
         <button class="primary" data-check="2">Conferir</button>
         <button data-show="2">Ver gabarito</button>
@@ -496,33 +572,33 @@ printf(<span class="st">"Maior = %.2f na posicao %d\n"</span>, vetor[pos], pos);
       <div class="sol" id="s2" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
-          <span class="key"><i>1</i>n - 1</span><span class="key"><i>2</i>i + 1</span><span class="key"><i>3</i>&gt;=</span><span class="key"><i>4</i>i</span><span class="key"><i>5</i>25.7 - 12.3</span><span class="key"><i>6</i>0</span>
+          <span class="key"><i>1</i>0</span><span class="key"><i>2</i>1</span><span class="key"><i>3</i>n - 1</span>
         </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> gera 15 reais na faixa pedida e descobre, recursivamente, o maior deles e a posição em que ele aparece pela primeira vez.</p>
-          <p><strong>Por que devolver o índice e não o valor:</strong> o enunciado pede as duas informações. Devolvendo o índice você tem as duas de graça — o valor é <code>v[pos]</code>. Se a função devolvesse só o número, você precisaria de uma segunda varredura para achar a posição.</p>
-          <p><strong>Caso base <code>i == n - 1</code>:</strong> quando sobra um único elemento, ele é trivialmente o maior do pedaço que resta, então a função devolve o próprio índice.</p>
-          <p><strong>A comparação <code>&gt;=</code> é o coração da questão:</strong> a recursão resolve primeiro o pedaço da direita e só depois compara com o elemento atual, que está mais à esquerda. Com <code>&gt;=</code>, o empate é resolvido a favor do índice menor, ou seja, da primeira ocorrência. Se estivesse <code>&gt;</code>, o programa devolveria a <em>última</em> posição do maior valor e a questão estaria errada.</p>
-          <p><strong>A faixa de reais:</strong> <code>(float)rand() / RAND_MAX</code> produz um número entre 0 e 1; multiplicado pela amplitude (25.7 − 12.3 = 13.4) e somado ao mínimo, cai dentro de [12.3, 25.7].</p>
+          <p><strong>O que o código faz:</strong> lê um número e devolve o fatorial dele. As duas versões dão o mesmo resultado por caminhos diferentes.</p>
+          <p><strong>Quem substitui o <code>while</code>:</strong> a própria chamada recursiva. No iterativo, a condição <code>n&gt;1</code> decide se repete e <code>n--</code> faz o valor andar. No recursivo, o <code>if(n==0)</code> decide se para e o argumento <code>n-1</code> faz o valor andar. É a mesma engrenagem — condição de parada e avanço — escrita de outro jeito.</p>
+          <p><strong>Quem substitui a variável <code>fat</code>:</strong> ninguém. O acumulador desaparece: os produtos ficam guardados nas chamadas empilhadas e são multiplicados na volta — <code>4*(3*(2*(1*1)))</code>. Isso é o que se ganha e o que se paga na recursão: código mais curto, mas consumo de pilha proporcional a <code>n</code>.</p>
+          <p><strong>Por que <code>n==0</code> e não <code>n==1</code>:</strong> as duas param, mas <code>n==0</code> também cobre <code>fatorial(0)</code>, que por definição vale 1. Com <code>n==1</code>, chamar <code>fatorial(0)</code> passaria direto e a função desceria para −1, −2, −3… até estourar a pilha. Testar <code>n&lt;=1</code> resolve os dois de uma vez e é uma resposta igualmente aceitável.</p>
+          <p><strong>Atenção ao tipo:</strong> <code>int</code> estoura em 13!. Se a prova pedir números maiores, use <code>long long</code>.</p>
         </div>
       </div>
     </article>
 
     <!-- Q3 -->
     <article class="q" data-q="3">
-      <div class="q-head"><span class="q-num">03</span><h3 class="q-title">Soma da diagonal principal</h3><span class="q-src">Lista · Questão 3a</span></div>
-      <p class="q-task">Matriz quadrada de ordem digitada, valores inteiros de 4 a 12. <strong>Explique</strong> por que <code>n</code> aparece antes da matriz na lista de parâmetros.</p>
-<pre><code><span class="kw">int</span> somaPrincipal(<span class="kw">int</span> n, <span class="kw">int</span> m[n][n], <span class="kw">int</span> i) {
-    <span class="kw">if</span> (i == <span class="lb">1</span><input class="bl" id="q3b1" size="3" data-a="n" aria-label="lacuna 1">)
-        <span class="kw">return</span> <span class="lb">2</span><input class="bl" id="q3b2" size="3" data-a="0" aria-label="lacuna 2">;
-
-    <span class="kw">return</span> m[i][<span class="lb">3</span><input class="bl" id="q3b3" size="3" data-a="i" aria-label="lacuna 3">] + somaPrincipal(n, m, <span class="lb">4</span><input class="bl" id="q3b4" size="5" data-a="i+1" aria-label="lacuna 4">);
+      <div class="q-head"><span class="q-num">03</span><h3 class="q-title">Potência sem usar <code>pow</code></h3><span class="q-src">func1.cpp · exercício pendente</span></div>
+      <p class="q-task">O exercício que ficou comentado no fim do <code>func1.cpp</code>: <code>eleva(y,x)</code> eleva a base <code>y</code> ao expoente <code>x</code>. <strong>Explique</strong> por que o caso base devolve 1 e não 0.</p>
+<pre><code><span class="cm">//eleva a base ao expoente sem utilizar o pow()</span>
+<span class="kw">int</span> eleva(<span class="kw">int</span> base, <span class="kw">int</span> expo){
+	<span class="kw">if</span>(expo==<span class="lb">1</span><input class="bl" id="q3b1" size="3" data-a="0" aria-label="lacuna 1">)<span class="cm">//caso base ou trivial</span>
+		<span class="kw">return</span> <span class="lb">2</span><input class="bl" id="q3b2" size="3" data-a="1" aria-label="lacuna 2">;
+	<span class="kw">return</span> base*eleva(base,<span class="lb">3</span><input class="bl" id="q3b3" size="7" data-a="expo-1" aria-label="lacuna 3">);<span class="cm">//chamada recursiva</span>
 }
 
-<span class="cm">/* --- na main: faixa de 4 a 12 --- */</span>
-m[i][j] = <span class="st">4</span> + rand() % <span class="lb">5</span><input class="bl" id="q3b5" size="3" data-a="9" aria-label="lacuna 5">;
-
-printf(<span class="st">"Diagonal principal = %d\n"</span>, somaPrincipal(n, m, <span class="st">0</span>));</code></pre>
+<span class="kw">int</span> main(){
+	<span class="kw">int</span> x=<span class="st">3</span>,y=<span class="st">5</span>;
+	cout&lt;&lt;y&lt;&lt;<span class="st">" elevado a "</span>&lt;&lt;x&lt;&lt;<span class="st">" = "</span>&lt;&lt;eleva(y,x)&lt;&lt;endl;
+}</code></pre>
       <div class="actions">
         <button class="primary" data-check="3">Conferir</button>
         <button data-show="3">Ver gabarito</button>
@@ -531,27 +607,50 @@ printf(<span class="st">"Diagonal principal = %d\n"</span>, somaPrincipal(n, m, 
       <div class="sol" id="s3" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
-          <span class="key"><i>1</i>n</span><span class="key"><i>2</i>0</span><span class="key"><i>3</i>i</span><span class="key"><i>4</i>i + 1</span><span class="key"><i>5</i>9</span>
+          <span class="key"><i>1</i>0</span><span class="key"><i>2</i>1</span><span class="key"><i>3</i>expo - 1</span>
         </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> percorre a diagonal principal — as casas em que linha e coluna são iguais — e devolve a soma desses elementos.</p>
-          <p><strong>Um índice só:</strong> na diagonal principal, linha e coluna andam juntas. Por isso <code>m[i][i]</code>, e por isso basta um parâmetro de controle em vez de dois.</p>
-          <p><strong>Caso base <code>i == n</code>:</strong> a diagonal tem exatamente <code>n</code> elementos, dos índices 0 a <code>n-1</code>. Quando <code>i</code> chega em <code>n</code>, acabou: devolve 0.</p>
-          <p><strong>Por que <code>n</code> vem antes da matriz:</strong> C lê os parâmetros da esquerda para a direita. Para declarar <code>int m[n][n]</code> o compilador já precisa conhecer <code>n</code> — se a ordem fosse invertida, <code>n</code> ainda não existiria naquele ponto. Esse é um array de tamanho variável (VLA), o jeito de receber uma matriz cuja ordem só é conhecida em tempo de execução.</p>
-          <p><strong>A faixa 4 a 12:</strong> são 12 − 4 + 1 = 9 valores possíveis, então <code>4 + rand() % 9</code>.</p>
+          <p><strong>O que o código faz:</strong> calcula 5³ = 125 multiplicando a base por ela mesma, uma vez a cada chamada, até o expoente zerar.</p>
+          <p><strong>O caso base devolve 1</strong> por dois motivos que se encaixam: matematicamente, qualquer número elevado a 0 é 1; e 1 é o elemento neutro da multiplicação, então não estraga o produto que está sendo montado na volta. Devolver 0 zeraria tudo — <code>5*5*5*0 = 0</code>.</p>
+          <p><strong>Compare com a soma do vetor</strong> (Questão 4), onde o caso base devolve 0. A regra geral vale para qualquer recursão que acumula: o caso base devolve o <em>neutro da operação</em>. Soma e contagem → 0. Produto e potência → 1.</p>
+          <p><strong>O que faz o problema diminuir:</strong> <code>expo-1</code>. A base fica igual em todas as chamadas; quem encolhe é o expoente. Passar <code>expo</code> sem o −1 seria recursão infinita.</p>
+          <p><strong>O outro exercício pendente do arquivo</strong> — <code>raiz(y)</code> — não é recursivo: basta <code>#include&lt;cmath&gt;</code> e <code>return sqrt(y);</code> numa função do 3º tipo.</p>
         </div>
       </div>
     </article>
 
+    <p class="bloco">Bloco B · vetores — Questões 1 e 2 da lista</p>
+
     <!-- Q4 -->
     <article class="q" data-q="4">
-      <div class="q-head"><span class="q-num">04</span><h3 class="q-title">Soma da diagonal secundária</h3><span class="q-src">Lista · Questão 3b</span></div>
-      <p class="q-task">Mesma matriz, agora a outra diagonal. Uma única lacuna — e é a que mais derruba gente na prova. <strong>Explique</strong> como você chegou na fórmula da coluna.</p>
-<pre><code><span class="kw">int</span> somaSecundaria(<span class="kw">int</span> n, <span class="kw">int</span> m[n][n], <span class="kw">int</span> i) {
-    <span class="kw">if</span> (i == n)
-        <span class="kw">return</span> <span class="st">0</span>;
+      <div class="q-head"><span class="q-num">04</span><h3 class="q-title">Soma dos elementos de um vetor</h3><span class="q-src">Lista · Questão 1</span></div>
+      <p class="q-task">Preencher um vetor de 10 inteiros aleatórios de 0 a 9 e somar tudo com uma função recursiva. <strong>Explique</strong> qual é o caso base e por que a função precisa do índice <code>i</code>.</p>
+<pre><code><span class="kw">#include</span>&lt;iostream&gt;
+<span class="kw">#include</span>&lt;cstdlib&gt;
+<span class="kw">#include</span>&lt;ctime&gt;
+<span class="kw">using namespace</span> std;
 
-    <span class="kw">return</span> m[i][<span class="lb">1</span><input class="bl" id="q4b1" size="9" data-a="n-1-i|n-i-1" aria-label="lacuna 1">] + somaSecundaria(n, m, i + <span class="st">1</span>);
+<span class="kw">const int</span> TAM = <span class="st">10</span>;
+
+<span class="kw">int</span> somaVetor(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i){
+	<span class="kw">if</span>(i<span class="lb">1</span><input class="bl" id="q4b1" size="3" data-a="==|&gt;=" aria-label="lacuna 1">n)<span class="cm">//caso base ou trivial</span>
+		<span class="kw">return</span> <span class="lb">2</span><input class="bl" id="q4b2" size="3" data-a="0" aria-label="lacuna 2">;
+	<span class="kw">return</span> v[i]+somaVetor(v,n,<span class="lb">3</span><input class="bl" id="q4b3" size="5" data-a="i+1" aria-label="lacuna 3">);<span class="cm">//chamada recursiva</span>
+}
+
+<span class="kw">int</span> main(){
+	<span class="kw">int</span> vetor[TAM],s;
+	srand(time(<span class="kw">NULL</span>));
+
+	<span class="kw">for</span>(<span class="kw">int</span> i=<span class="st">0</span>;i&lt;TAM;i++)
+		vetor[i] = rand()%<span class="lb">4</span><input class="bl" id="q4b4" size="3" data-a="10" aria-label="lacuna 4">;<span class="cm">//faixa de 0 a 9</span>
+
+	cout&lt;&lt;<span class="st">"Vetor: "</span>;
+	<span class="kw">for</span>(<span class="kw">int</span> i=<span class="st">0</span>;i&lt;TAM;i++)
+		cout&lt;&lt;vetor[i]&lt;&lt;<span class="st">" "</span>;
+
+	s = somaVetor(vetor,TAM,<span class="lb">5</span><input class="bl" id="q4b5" size="3" data-a="0" aria-label="lacuna 5">);
+	cout&lt;&lt;endl&lt;&lt;<span class="st">"Soma = "</span>&lt;&lt;s&lt;&lt;endl;
 }</code></pre>
       <div class="actions">
         <button class="primary" data-check="4">Conferir</button>
@@ -560,44 +659,51 @@ printf(<span class="st">"Diagonal principal = %d\n"</span>, somaPrincipal(n, m, 
       </div>
       <div class="sol" id="s4" hidden>
         <h4>Gabarito</h4>
-        <div class="keys"><span class="key"><i>1</i>n - 1 - i</span></div>
+        <div class="keys">
+          <span class="key"><i>1</i>==</span><span class="key"><i>2</i>0</span><span class="key"><i>3</i>i + 1</span><span class="key"><i>4</i>10</span><span class="key"><i>5</i>0</span>
+        </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> soma os elementos da diagonal secundária, a que desce da direita para a esquerda.</p>
-          <p><strong>De onde sai a fórmula:</strong> escreva as posições para <code>n = 4</code> — (0,3), (1,2), (2,1), (3,0). Em todas, linha + coluna = 3, ou seja, <code>i + j = n - 1</code>. Isolando: <code>j = n - 1 - i</code>.</p>
-          <p><strong>Erro clássico:</strong> escrever <code>n - i</code>. Na primeira chamada, com <code>i = 0</code>, isso daria a coluna <code>n</code>, que não existe — o programa lê memória fora da matriz e o resultado sai errado ou o programa quebra.</p>
-          <p><strong>Detalhe de prova:</strong> se <code>n</code> for ímpar, o elemento do centro pertence às duas diagonais. Somar as duas diagonais e esperar o total da matriz não funciona: esse elemento é contado duas vezes.</p>
+          <p><strong>O que o código faz:</strong> sorteia 10 inteiros entre 0 e 9, mostra o vetor e devolve a soma de todos os elementos usando recursão.</p>
+          <p><strong>Por que <code>rand()%10</code>:</strong> o resto da divisão por 10 só pode dar 0, 1, … 9 — exatamente a faixa pedida, e é a mesma linha que o professor usou na função <code>aleatorio</code> do <code>func1.cpp</code>. Para uma faixa de <code>a</code> a <code>b</code>: <code>a + rand()%(b-a+1)</code>.</p>
+          <p><strong>O índice <code>i</code>:</strong> é o parâmetro de controle. Sem laço, é ele que marca onde a varredura está; cada chamada avança uma posição. A primeira chamada parte de <code>0</code>.</p>
+          <p><strong>Caso base:</strong> quando <code>i==n</code> o índice passou do último elemento válido (<code>n-1</code>), não há mais nada para somar e a função devolve <code>0</code> — o neutro da soma. Devolver qualquer outro número estragaria o total.</p>
+          <p><strong>Chamada recursiva:</strong> <code>v[i]+somaVetor(v,n,i+1)</code> soma o elemento atual com a soma de todo o resto. As chamadas empilham até o caso base e os valores vão sendo somados na volta: <code>v[0]+(v[1]+(v[2]+…+0))</code>.</p>
+          <p><strong>Note a estrutura:</strong> é uma função do 3º tipo — recebe vetor, tamanho e índice, devolve um <code>int</code> que a <code>main</code> guarda em <code>s</code>. Igualzinho ao <code>mult</code> do <code>func1.cpp</code>, só que recursiva.</p>
         </div>
       </div>
     </article>
 
     <!-- Q5 -->
     <article class="q" data-q="5">
-      <div class="q-head"><span class="q-num">05</span><h3 class="q-title">Busca recursiva em uma matriz</h3><span class="q-src">Lista · Questão 4</span></div>
-      <p class="q-task">Varrer a matriz inteira sem laço, contar quantas vezes o valor procurado aparece e mostrar a linha e a coluna de cada ocorrência. <strong>Explique</strong> como um único índice consegue percorrer duas dimensões.</p>
-<pre><code><span class="kw">int</span> buscaRecursiva(<span class="kw">int</span> n, <span class="kw">int</span> m[n][n], <span class="kw">int</span> alvo, <span class="kw">int</span> pos) {
-    <span class="kw">int</span> linha, coluna, achou;
+      <div class="q-head"><span class="q-num">05</span><h3 class="q-title">Maior elemento e sua primeira posição</h3><span class="q-src">Lista · Questão 2</span></div>
+      <p class="q-task">15 números reais entre 12.3 e 25.7. A função recursiva devolve o <strong>índice</strong> do maior valor — e, em caso de empate, o da <strong>primeira</strong> ocorrência. <strong>Explique</strong> qual comparação garante isso.</p>
+<pre><code><span class="kw">const int</span> TAM = <span class="st">15</span>;
 
-    <span class="kw">if</span> (pos == <span class="lb">1</span><input class="bl" id="q5b1" size="5" data-a="n*n" aria-label="lacuna 1">)        <span class="cm">/* varreu a matriz toda */</span>
-        <span class="kw">return</span> <span class="st">0</span>;
+<span class="kw">int</span> indiceDoMaior(<span class="kw">float</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i){
+	<span class="kw">if</span>(i==<span class="lb">1</span><input class="bl" id="q5b1" size="5" data-a="n-1" aria-label="lacuna 1">)<span class="cm">//caso base: sobrou so o ultimo</span>
+		<span class="kw">return</span> i;
 
-    linha  = pos <span class="lb">2</span><input class="bl" id="q5b2" size="3" data-a="/" aria-label="lacuna 2"> n;
-    coluna = pos <span class="lb">3</span><input class="bl" id="q5b3" size="3" data-a="%" aria-label="lacuna 3"> n;
+	<span class="kw">int</span> idxResto = indiceDoMaior(v,n,<span class="lb">2</span><input class="bl" id="q5b2" size="5" data-a="i+1" aria-label="lacuna 2">);
 
-    achou = (m[linha][coluna] == alvo);   <span class="cm">/* 1 se igual, 0 se não */</span>
+	<span class="kw">if</span>(v[i]<span class="lb">3</span><input class="bl" id="q5b3" size="3" data-a="&gt;=" aria-label="lacuna 3">v[idxResto])<span class="cm">//empate fica com o atual</span>
+		<span class="kw">return</span> <span class="lb">4</span><input class="bl" id="q5b4" size="3" data-a="i" aria-label="lacuna 4">;
 
-    <span class="kw">if</span> (achou)
-        printf(<span class="st">"  encontrado em (%d, %d)\n"</span>, linha, coluna);
-
-    <span class="kw">return</span> <span class="lb">4</span><input class="bl" id="q5b4" size="7" data-a="achou" aria-label="lacuna 4"> + buscaRecursiva(n, m, alvo, <span class="lb">5</span><input class="bl" id="q5b5" size="7" data-a="pos+1" aria-label="lacuna 5">);
+	<span class="kw">return</span> idxResto;
 }
 
-<span class="cm">/* --- na main --- */</span>
-total = buscaRecursiva(n, m, valor, <span class="st">0</span>);
+<span class="kw">int</span> main(){
+	<span class="kw">float</span> vetor[TAM];
+	<span class="kw">int</span> pos;
+	srand(time(<span class="kw">NULL</span>));
 
-<span class="kw">if</span> (total == <span class="st">0</span>)
-    printf(<span class="st">"Valor %d nao encontrado na matriz.\n"</span>, valor);
-<span class="kw">else</span>
-    printf(<span class="st">"Valor %d encontrado %d vez(es).\n"</span>, valor, total);</code></pre>
+	<span class="kw">for</span>(<span class="kw">int</span> i=<span class="st">0</span>;i&lt;TAM;i++)
+		vetor[i] = <span class="st">12.3</span> + ((<span class="kw">float</span>)rand()/RAND_MAX)*(<span class="lb">5</span><input class="bl" id="q5b5" size="11" data-a="25.7-12.3|13.4" aria-label="lacuna 5">);
+
+	pos = indiceDoMaior(vetor,TAM,<span class="lb">6</span><input class="bl" id="q5b6" size="3" data-a="0" aria-label="lacuna 6">);
+
+	cout&lt;&lt;fixed&lt;&lt;setprecision(<span class="st">2</span>);
+	cout&lt;&lt;<span class="st">"Maior = "</span>&lt;&lt;vetor[pos]&lt;&lt;<span class="st">" na posicao "</span>&lt;&lt;pos&lt;&lt;endl;
+}</code></pre>
       <div class="actions">
         <button class="primary" data-check="5">Conferir</button>
         <button data-show="5">Ver gabarito</button>
@@ -606,34 +712,37 @@ total = buscaRecursiva(n, m, valor, <span class="st">0</span>);
       <div class="sol" id="s5" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
-          <span class="key"><i>1</i>n * n</span><span class="key"><i>2</i>/</span><span class="key"><i>3</i>%</span><span class="key"><i>4</i>achou</span><span class="key"><i>5</i>pos + 1</span>
+          <span class="key"><i>1</i>n - 1</span><span class="key"><i>2</i>i + 1</span><span class="key"><i>3</i>&gt;=</span><span class="key"><i>4</i>i</span><span class="key"><i>5</i>25.7 - 12.3</span><span class="key"><i>6</i>0</span>
         </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> percorre as <code>n*n</code> casas da matriz, imprime a posição de cada ocorrência do valor procurado e devolve o total de ocorrências.</p>
-          <p><strong>Índice linear:</strong> a matriz é tratada como se fosse um vetor de <code>n*n</code> posições. A casa número <code>pos</code> está na linha <code>pos / n</code> (divisão inteira: quantas linhas completas já passaram) e na coluna <code>pos % n</code> (o resto: quanto andou dentro da linha atual). Com <code>n = 5</code>, <code>pos = 7</code> vira linha 1, coluna 2. É esse par de operações que dá o percurso pedido no enunciado — coluna a coluna, pulando para a próxima linha quando a atual acaba.</p>
-          <p><strong>Contagem sem variável global:</strong> em C, uma comparação vale 1 quando verdadeira e 0 quando falsa. Somando <code>achou</code> ao resultado da chamada seguinte, o total sobe sozinho na volta da recursão, sem precisar de contador externo nem de ponteiro.</p>
-          <p><strong>Mensagem de "não encontrado":</strong> quem decide isso é a <code>main</code>, olhando se o retorno foi 0. A função recursiva só conta — cada uma faz uma coisa, que é o que o enunciado pede ao mandar organizar o programa em funções.</p>
-          <p><strong>Alternativa válida:</strong> usar dois índices, <code>i</code> e <code>j</code>, com a regra "se <code>j == n</code>, chama com <code>(i + 1, 0)</code>". Funciona igual, mas exige duas condições de parada em vez de uma.</p>
+          <p><strong>O que o código faz:</strong> gera 15 reais na faixa pedida e descobre, recursivamente, o maior deles e a posição em que aparece pela primeira vez.</p>
+          <p><strong>Por que devolver o índice e não o valor:</strong> o enunciado pede as duas informações. Devolvendo o índice você tem as duas de graça — o valor é <code>vetor[pos]</code>. Se a função devolvesse só o número, você precisaria de uma segunda varredura para achar a posição.</p>
+          <p><strong>Caso base <code>i==n-1</code>:</strong> quando sobra um único elemento, ele é trivialmente o maior do pedaço que resta, então a função devolve o próprio índice.</p>
+          <p><strong>A comparação <code>&gt;=</code> é o coração da questão:</strong> a recursão resolve primeiro o pedaço da direita e só depois compara com o elemento atual, que está mais à esquerda. Com <code>&gt;=</code>, o empate é resolvido a favor do índice menor, ou seja, da primeira ocorrência. Se estivesse <code>&gt;</code>, o programa devolveria a <em>última</em> posição do maior valor e a questão estaria errada.</p>
+          <p><strong>A faixa de reais:</strong> <code>(float)rand()/RAND_MAX</code> dá um número entre 0 e 1; multiplicado pela amplitude (25.7 − 12.3 = 13.4) e somado ao mínimo, cai dentro de [12.3, 25.7].</p>
+          <p><strong>Não esqueça o <code>#include&lt;iomanip&gt;</code>:</strong> <code>fixed</code> e <code>setprecision(2)</code> vêm de lá e valem para todas as saídas seguintes — basta chamar uma vez.</p>
         </div>
       </div>
     </article>
 
+    <p class="bloco">Bloco C · matrizes — Questões 3 e 4 da lista</p>
+
     <!-- Q6 -->
     <article class="q" data-q="6">
-      <div class="q-head"><span class="q-num">06</span><h3 class="q-title">Troca de valores com ponteiros</h3><span class="q-src">Ponteiros</span></div>
-      <p class="q-task">A função clássica de <em>swap</em>. <strong>Explique</strong> o que aconteceria se os parâmetros fossem <code>int a, int b</code>.</p>
-<pre><code><span class="kw">void</span> troca(<span class="kw">int</span> *a, <span class="kw">int</span> *b) {
-    <span class="kw">int</span> aux;
+      <div class="q-head"><span class="q-num">06</span><h3 class="q-title">Soma da diagonal principal</h3><span class="q-src">Lista · Questão 3a</span></div>
+      <p class="q-task">Matriz quadrada de ordem digitada, valores inteiros de 4 a 12. <strong>Explique</strong> por que a segunda dimensão do parâmetro é <code>MAX</code> e não <code>n</code>.</p>
+<pre><code><span class="kw">const int</span> MAX = <span class="st">20</span>;
 
-    aux = <span class="lb">1</span><input class="bl" id="q6b1" size="4" data-a="*a" aria-label="lacuna 1">;
-    *a  = <span class="lb">2</span><input class="bl" id="q6b2" size="4" data-a="*b" aria-label="lacuna 2">;
-    *b  = aux;
+<span class="kw">int</span> somaPrincipal(<span class="kw">int</span> m[][MAX], <span class="kw">int</span> n, <span class="kw">int</span> i){
+	<span class="kw">if</span>(i==<span class="lb">1</span><input class="bl" id="q6b1" size="3" data-a="n" aria-label="lacuna 1">)<span class="cm">//caso base ou trivial</span>
+		<span class="kw">return</span> <span class="lb">2</span><input class="bl" id="q6b2" size="3" data-a="0" aria-label="lacuna 2">;
+	<span class="kw">return</span> m[i][<span class="lb">3</span><input class="bl" id="q6b3" size="3" data-a="i" aria-label="lacuna 3">]+somaPrincipal(m,n,<span class="lb">4</span><input class="bl" id="q6b4" size="5" data-a="i+1" aria-label="lacuna 4">);<span class="cm">//chamada recursiva</span>
 }
 
-<span class="cm">/* --- na main --- */</span>
-<span class="kw">int</span> x = <span class="st">10</span>, y = <span class="st">20</span>;
-troca(<span class="lb">3</span><input class="bl" id="q6b3" size="4" data-a="&amp;x" aria-label="lacuna 3">, <span class="lb">4</span><input class="bl" id="q6b4" size="4" data-a="&amp;y" aria-label="lacuna 4">);
-printf(<span class="st">"%d %d\n"</span>, x, y);   <span class="cm">/* 20 10 */</span></code></pre>
+<span class="cm">//--- na main: faixa de 4 a 12 ---</span>
+m[i][j] = <span class="st">4</span> + rand()%<span class="lb">5</span><input class="bl" id="q6b5" size="3" data-a="9" aria-label="lacuna 5">;
+
+cout&lt;&lt;<span class="st">"Diagonal principal = "</span>&lt;&lt;somaPrincipal(m,n,<span class="st">0</span>)&lt;&lt;endl;</code></pre>
       <div class="actions">
         <button class="primary" data-check="6">Conferir</button>
         <button data-show="6">Ver gabarito</button>
@@ -642,37 +751,27 @@ printf(<span class="st">"%d %d\n"</span>, x, y);   <span class="cm">/* 20 10 */<
       <div class="sol" id="s6" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
-          <span class="key"><i>1</i>*a</span><span class="key"><i>2</i>*b</span><span class="key"><i>3</i>&amp;x</span><span class="key"><i>4</i>&amp;y</span>
+          <span class="key"><i>1</i>n</span><span class="key"><i>2</i>0</span><span class="key"><i>3</i>i</span><span class="key"><i>4</i>i + 1</span><span class="key"><i>5</i>9</span>
         </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> troca o conteúdo de duas variáveis da <code>main</code>, usando uma terceira variável auxiliar para não perder o primeiro valor.</p>
-          <p><strong>Por que precisa de <code>aux</code>:</strong> se você escrevesse <code>*a = *b</code> direto, o valor original de <code>a</code> seria sobrescrito e não haveria mais como recuperá-lo.</p>
-          <p><strong>Se fosse por valor:</strong> com <code>int a, int b</code>, a função receberia cópias. A troca aconteceria de verdade, mas só dentro da função — ao voltar para a <code>main</code>, <code>x</code> e <code>y</code> continuariam 10 e 20. É o exemplo canônico de por que ponteiro existe: é o único jeito de uma função alterar uma variável que não é dela.</p>
-          <p><strong>O <code>&amp;</code> na chamada:</strong> o parâmetro é do tipo <code>int *</code>, então o argumento tem de ser um endereço. <code>&amp;x</code> lê-se "endereço de x".</p>
+          <p><strong>O que o código faz:</strong> percorre a diagonal principal — as casas em que linha e coluna são iguais — e devolve a soma desses elementos.</p>
+          <p><strong>Um índice só:</strong> na diagonal principal, linha e coluna andam juntas. Por isso <code>m[i][i]</code>, e por isso basta um parâmetro de controle em vez de dois.</p>
+          <p><strong>Caso base <code>i==n</code>:</strong> a diagonal tem exatamente <code>n</code> elementos, dos índices 0 a <code>n-1</code>. Quando <code>i</code> chega em <code>n</code>, acabou: devolve 0.</p>
+          <p><strong>Por que <code>MAX</code> e não <code>n</code>:</strong> para achar <code>m[i][j]</code> na memória o compilador calcula <code>i*(tamanho da linha)+j</code>, então precisa saber o tamanho da linha <em>na hora de compilar</em>. Como <code>n</code> só é conhecido quando o programa roda, C++ exige uma constante ali. A matriz é declarada com o teto <code>MAX</code> e o programa usa apenas o quadrado de lado <code>n</code> no canto superior esquerdo; <code>n</code> viaja como parâmetro comum, para a função saber onde parar.</p>
+          <p><strong>A faixa 4 a 12:</strong> são 12 − 4 + 1 = 9 valores possíveis, então <code>4 + rand()%9</code>.</p>
         </div>
       </div>
     </article>
 
     <!-- Q7 -->
     <article class="q" data-q="7">
-      <div class="q-head"><span class="q-num">07</span><h3 class="q-title">Dois resultados de uma vez</h3><span class="q-src">Ponteiros + recursão</span></div>
-      <p class="q-task">Uma função <code>void</code> que acha o menor e o maior do vetor na mesma varredura recursiva. <strong>Explique</strong> como ela devolve dois valores sem ter retorno.</p>
-<pre><code><span class="kw">void</span> minMax(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i, <span class="kw">int</span> *menor, <span class="kw">int</span> *maior) {
-    <span class="kw">if</span> (i == n)
-        <span class="kw">return</span>;                       <span class="cm">/* caso base: nada a fazer */</span>
-
-    <span class="kw">if</span> (v[i] &lt; <span class="lb">1</span><input class="bl" id="q7b1" size="7" data-a="*menor" aria-label="lacuna 1">)
-        *menor = v[i];
-
-    <span class="kw">if</span> (v[i] &gt; *maior)
-        <span class="lb">2</span><input class="bl" id="q7b2" size="7" data-a="*maior" aria-label="lacuna 2"> = v[i];
-
-    minMax(v, n, <span class="lb">3</span><input class="bl" id="q7b3" size="5" data-a="i+1" aria-label="lacuna 3">, menor, maior);
-}
-
-<span class="cm">/* --- na main --- */</span>
-<span class="kw">int</span> menor = vetor[<span class="st">0</span>], maior = vetor[<span class="st">0</span>];
-minMax(vetor, TAM, <span class="st">1</span>, <span class="lb">4</span><input class="bl" id="q7b4" size="8" data-a="&amp;menor" aria-label="lacuna 4">, <span class="lb">5</span><input class="bl" id="q7b5" size="8" data-a="&amp;maior" aria-label="lacuna 5">);</code></pre>
+      <div class="q-head"><span class="q-num">07</span><h3 class="q-title">Soma da diagonal secundária</h3><span class="q-src">Lista · Questão 3b</span></div>
+      <p class="q-task">Mesma matriz, agora a outra diagonal. Uma única lacuna — e é a que mais derruba gente na prova. <strong>Explique</strong> como você chegou na fórmula da coluna.</p>
+<pre><code><span class="kw">int</span> somaSecundaria(<span class="kw">int</span> m[][MAX], <span class="kw">int</span> n, <span class="kw">int</span> i){
+	<span class="kw">if</span>(i==n)<span class="cm">//caso base ou trivial</span>
+		<span class="kw">return</span> <span class="st">0</span>;
+	<span class="kw">return</span> m[i][<span class="lb">1</span><input class="bl" id="q7b1" size="9" data-a="n-1-i|n-i-1" aria-label="lacuna 1">]+somaSecundaria(m,n,i+<span class="st">1</span>);
+}</code></pre>
       <div class="actions">
         <button class="primary" data-check="7">Conferir</button>
         <button data-show="7">Ver gabarito</button>
@@ -680,33 +779,45 @@ minMax(vetor, TAM, <span class="st">1</span>, <span class="lb">4</span><input cl
       </div>
       <div class="sol" id="s7" hidden>
         <h4>Gabarito</h4>
-        <div class="keys">
-          <span class="key"><i>1</i>*menor</span><span class="key"><i>2</i>*maior</span><span class="key"><i>3</i>i + 1</span><span class="key"><i>4</i>&amp;menor</span><span class="key"><i>5</i>&amp;maior</span>
-        </div>
+        <div class="keys"><span class="key"><i>1</i>n - 1 - i</span></div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> varre o vetor uma única vez e atualiza, através de ponteiros, as variáveis <code>menor</code> e <code>maior</code> que vivem na <code>main</code>.</p>
-          <p><strong>Dois resultados sem <code>return</code>:</strong> uma função em C devolve no máximo um valor pelo <code>return</code>. Quando precisa entregar dois ou mais, recebe ponteiros e escreve diretamente na memória de quem chamou. É o mesmo mecanismo do <code>scanf</code> — por isso ele exige <code>&amp;</code>.</p>
-          <p><strong>Por que os dois começam em <code>vetor[0]</code>:</strong> inicializar com 0 quebraria com vetores só de negativos (nenhum seria menor que 0 pelo lado do maior). Começando com um elemento real do vetor, a comparação sempre faz sentido. Por isso também a chamada parte do índice 1: o elemento 0 já foi considerado.</p>
-          <p><strong>Cuidado com a lacuna 1:</strong> escrever <code>v[i] &lt; menor</code> compararia um <code>int</code> com um endereço — o compilador reclama, e mesmo se passasse, a comparação não teria sentido. Dentro da função, o valor é sempre <code>*menor</code>.</p>
+          <p><strong>O que o código faz:</strong> soma os elementos da diagonal secundária, a que desce da direita para a esquerda.</p>
+          <p><strong>De onde sai a fórmula:</strong> escreva as posições para <code>n=4</code> — (0,3), (1,2), (2,1), (3,0). Em todas, linha + coluna = 3, ou seja, <code>i+j = n-1</code>. Isolando: <code>j = n-1-i</code>.</p>
+          <p><strong>Erro clássico:</strong> escrever <code>n-i</code>. Na primeira chamada, com <code>i=0</code>, isso daria a coluna <code>n</code>, que não faz parte do quadrado em uso — o programa lê lixo da memória e o resultado sai errado.</p>
+          <p><strong>Detalhe de prova:</strong> se <code>n</code> for ímpar, o elemento do centro pertence às duas diagonais. Somar as duas e esperar o total da matriz não funciona: esse elemento é contado duas vezes.</p>
         </div>
       </div>
     </article>
 
     <!-- Q8 -->
     <article class="q" data-q="8">
-      <div class="q-head"><span class="q-num">08</span><h3 class="q-title">Fatorial e potência</h3><span class="q-src">Recursão clássica</span></div>
-      <p class="q-task">As duas recursões que aparecem em qualquer prova de recursividade. <strong>Explique</strong> por que o caso base da potência devolve 1 e não 0.</p>
-<pre><code><span class="kw">long</span> fatorial(<span class="kw">int</span> n) {
-    <span class="kw">if</span> (n <span class="lb">1</span><input class="bl" id="q8b1" size="4" data-a="&lt;=|==" aria-label="lacuna 1"> <span class="st">1</span>)
-        <span class="kw">return</span> <span class="st">1</span>;
-    <span class="kw">return</span> n * fatorial(<span class="lb">2</span><input class="bl" id="q8b2" size="5" data-a="n-1" aria-label="lacuna 2">);
+      <div class="q-head"><span class="q-num">08</span><h3 class="q-title">Busca recursiva em uma matriz</h3><span class="q-src">Lista · Questão 4</span></div>
+      <p class="q-task">Varrer a matriz inteira sem laço, contar quantas vezes o valor aparece e mostrar linha e coluna de cada ocorrência. <strong>Explique</strong> como um único índice percorre duas dimensões.</p>
+<pre><code><span class="kw">int</span> buscaRecursiva(<span class="kw">int</span> m[][MAX], <span class="kw">int</span> n, <span class="kw">int</span> alvo, <span class="kw">int</span> pos){
+	<span class="kw">if</span>(pos==<span class="lb">1</span><input class="bl" id="q8b1" size="5" data-a="n*n" aria-label="lacuna 1">)<span class="cm">//caso base: varreu tudo</span>
+		<span class="kw">return</span> <span class="st">0</span>;
+
+	<span class="kw">int</span> linha  = pos<span class="lb">2</span><input class="bl" id="q8b2" size="3" data-a="/" aria-label="lacuna 2">n;
+	<span class="kw">int</span> coluna = pos<span class="lb">3</span><input class="bl" id="q8b3" size="3" data-a="%" aria-label="lacuna 3">n;
+
+	<span class="kw">bool</span> achou = (m[linha][coluna]==alvo);<span class="cm">//true vale 1, false vale 0</span>
+
+	<span class="kw">if</span>(achou)
+		cout&lt;&lt;<span class="st">"  encontrado em ("</span>&lt;&lt;linha&lt;&lt;<span class="st">","</span>&lt;&lt;coluna&lt;&lt;<span class="st">")"</span>&lt;&lt;endl;
+
+	<span class="kw">return</span> <span class="lb">4</span><input class="bl" id="q8b4" size="7" data-a="achou" aria-label="lacuna 4">+buscaRecursiva(m,n,alvo,<span class="lb">5</span><input class="bl" id="q8b5" size="7" data-a="pos+1" aria-label="lacuna 5">);
 }
 
-<span class="kw">double</span> potencia(<span class="kw">double</span> base, <span class="kw">int</span> expo) {
-    <span class="kw">if</span> (expo == <span class="st">0</span>)
-        <span class="kw">return</span> <span class="lb">3</span><input class="bl" id="q8b3" size="3" data-a="1" aria-label="lacuna 3">;
-    <span class="kw">return</span> base * potencia(base, <span class="lb">4</span><input class="bl" id="q8b4" size="7" data-a="expo-1" aria-label="lacuna 4">);
-}</code></pre>
+<span class="cm">//--- na main ---</span>
+cout&lt;&lt;<span class="st">"Informe o valor a pesquisar "</span>;
+cin&gt;&gt;valor;
+
+total = buscaRecursiva(m,n,valor,<span class="st">0</span>);
+
+<span class="kw">if</span>(total==<span class="st">0</span>)
+	cout&lt;&lt;<span class="st">"Valor "</span>&lt;&lt;valor&lt;&lt;<span class="st">" nao encontrado na matriz."</span>&lt;&lt;endl;
+<span class="kw">else</span>
+	cout&lt;&lt;<span class="st">"Valor "</span>&lt;&lt;valor&lt;&lt;<span class="st">" encontrado "</span>&lt;&lt;total&lt;&lt;<span class="st">" vez(es)."</span>&lt;&lt;endl;</code></pre>
       <div class="actions">
         <button class="primary" data-check="8">Conferir</button>
         <button data-show="8">Ver gabarito</button>
@@ -715,29 +826,36 @@ minMax(vetor, TAM, <span class="st">1</span>, <span class="lb">4</span><input cl
       <div class="sol" id="s8" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
-          <span class="key"><i>1</i>&lt;=</span><span class="key"><i>2</i>n - 1</span><span class="key"><i>3</i>1</span><span class="key"><i>4</i>expo - 1</span>
+          <span class="key"><i>1</i>n*n</span><span class="key"><i>2</i>/</span><span class="key"><i>3</i>%</span><span class="key"><i>4</i>achou</span><span class="key"><i>5</i>pos + 1</span>
         </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> <code>fatorial(5)</code> devolve 120; <code>potencia(2, 10)</code> devolve 1024. Cada chamada resolve um passo e delega o resto.</p>
-          <p><strong>Por que <code>&lt;=</code> e não <code>==</code>:</strong> com <code>n &lt;= 1</code>, tanto <code>fatorial(1)</code> quanto <code>fatorial(0)</code> param corretamente — e 0! é 1 por definição. Se o teste fosse <code>n == 1</code>, chamar <code>fatorial(0)</code> passaria direto e a função iria para −1, −2, −3… até estourar a pilha.</p>
-          <p><strong>O caso base da potência devolve 1</strong> porque qualquer número elevado a 0 é 1, e porque 1 é o elemento neutro da multiplicação: devolver 0 zeraria o produto inteiro na volta da recursão. Repare no paralelo com a soma do vetor, onde o caso base devolve 0 — o neutro <em>daquela</em> operação. A pergunta a se fazer sempre é: qual valor não estraga a conta?</p>
-          <p><strong>Convergência:</strong> cada chamada diminui o argumento em 1, então o caso base é alcançado. Um passo que não reduz o problema (chamar <code>fatorial(n)</code> de novo, por exemplo) é recursão infinita.</p>
+          <p><strong>O que o código faz:</strong> percorre as <code>n*n</code> casas em uso da matriz, imprime a posição de cada ocorrência do valor procurado e devolve o total de ocorrências.</p>
+          <p><strong>Índice linear:</strong> a matriz é tratada como se fosse um vetor de <code>n*n</code> posições. A casa número <code>pos</code> está na linha <code>pos/n</code> (divisão inteira: quantas linhas completas já passaram) e na coluna <code>pos%n</code> (o resto: quanto andou dentro da linha atual). Com <code>n=5</code>, <code>pos=7</code> vira linha 1, coluna 2. É esse par de operações que dá o percurso pedido no enunciado — coluna a coluna, pulando para a próxima linha quando a atual acaba.</p>
+          <p><strong>Contagem sem variável global:</strong> em C++, <code>true</code> convertido para inteiro vale 1 e <code>false</code> vale 0. Somando <code>achou</code> ao resultado da chamada seguinte, o total sobe sozinho na volta da recursão, sem contador externo nem ponteiro.</p>
+          <p><strong>Mensagem de "não encontrado":</strong> quem decide isso é a <code>main</code>, olhando se o retorno foi 0. A função recursiva só conta — cada uma faz uma coisa, que é o que o enunciado pede ao mandar organizar o programa em funções.</p>
+          <p><strong>Alternativa válida:</strong> usar dois índices, <code>i</code> e <code>j</code>, com a regra "se <code>j==n</code>, chama com <code>(i+1,0)</code>". Funciona igual, mas exige duas condições de parada em vez de uma.</p>
         </div>
       </div>
     </article>
 
+    <p class="bloco">Bloco D · ponteiros</p>
+
     <!-- Q9 -->
     <article class="q" data-q="9">
-      <div class="q-head"><span class="q-num">09</span><h3 class="q-title">Soma do vetor andando com o ponteiro</h3><span class="q-src">Aritmética de ponteiros</span></div>
-      <p class="q-task">A mesma soma da Questão 1, sem índice nenhum: quem anda é o ponteiro. <strong>Explique</strong> a diferença entre <code>p + 1</code> e <code>*p + 1</code>.</p>
-<pre><code><span class="kw">int</span> somaPtr(<span class="kw">int</span> *p, <span class="kw">int</span> n) {
-    <span class="kw">if</span> (n == <span class="st">0</span>)
-        <span class="kw">return</span> <span class="st">0</span>;
-    <span class="kw">return</span> <span class="lb">1</span><input class="bl" id="q9b1" size="4" data-a="*p" aria-label="lacuna 1"> + somaPtr(<span class="lb">2</span><input class="bl" id="q9b2" size="5" data-a="p+1" aria-label="lacuna 2">, <span class="lb">3</span><input class="bl" id="q9b3" size="5" data-a="n-1" aria-label="lacuna 3">);
+      <div class="q-head"><span class="q-num">09</span><h3 class="q-title">Troca de valores com ponteiros</h3><span class="q-src">Ponteiros</span></div>
+      <p class="q-task">A função clássica de troca. <strong>Explique</strong> o que aconteceria se os parâmetros fossem <code>int a, int b</code>.</p>
+<pre><code><span class="kw">void</span> troca(<span class="kw">int</span> *a, <span class="kw">int</span> *b){
+	<span class="kw">int</span> aux;
+	aux = <span class="lb">1</span><input class="bl" id="q9b1" size="4" data-a="*a" aria-label="lacuna 1">;
+	*a  = <span class="lb">2</span><input class="bl" id="q9b2" size="4" data-a="*b" aria-label="lacuna 2">;
+	*b  = aux;
 }
 
-<span class="cm">/* --- na main --- */</span>
-printf(<span class="st">"Soma = %d\n"</span>, somaPtr(vetor, TAM));   <span class="cm">/* sem &amp;: vetor já é endereço */</span></code></pre>
+<span class="kw">int</span> main(){
+	<span class="kw">int</span> x=<span class="st">10</span>,y=<span class="st">20</span>;
+	troca(<span class="lb">3</span><input class="bl" id="q9b3" size="4" data-a="&amp;x" aria-label="lacuna 3">,<span class="lb">4</span><input class="bl" id="q9b4" size="4" data-a="&amp;y" aria-label="lacuna 4">);
+	cout&lt;&lt;x&lt;&lt;<span class="st">" "</span>&lt;&lt;y&lt;&lt;endl;<span class="cm">//20 10</span>
+}</code></pre>
       <div class="actions">
         <button class="primary" data-check="9">Conferir</button>
         <button data-show="9">Ver gabarito</button>
@@ -746,36 +864,37 @@ printf(<span class="st">"Soma = %d\n"</span>, somaPtr(vetor, TAM));   <span clas
       <div class="sol" id="s9" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
-          <span class="key"><i>1</i>*p</span><span class="key"><i>2</i>p + 1</span><span class="key"><i>3</i>n - 1</span>
+          <span class="key"><i>1</i>*a</span><span class="key"><i>2</i>*b</span><span class="key"><i>3</i>&amp;x</span><span class="key"><i>4</i>&amp;y</span>
         </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> soma <code>n</code> inteiros a partir do endereço <code>p</code>. Em vez de avançar um índice, avança o próprio ponteiro e diminui a quantidade que falta.</p>
-          <p><strong><code>p + 1</code> × <code>*p + 1</code>:</strong> <code>p + 1</code> é o endereço do <em>próximo inteiro</em> — o compilador soma <code>sizeof(int)</code> bytes, não 1 byte. Já <code>*p + 1</code> é o valor apontado mais um. Trocar um pelo outro é erro de prova garantido.</p>
-          <p><strong>Por que <code>somaPtr(vetor, TAM)</code> não leva <code>&amp;</code>:</strong> o nome do vetor já é o endereço do primeiro elemento. <code>vetor</code>, <code>&amp;vetor[0]</code> e o ponteiro <code>p</code> apontam para o mesmo lugar.</p>
-          <p><strong>Equivalência útil:</strong> <code>v[i]</code> é literalmente <code>*(v + i)</code>. As duas versões da soma — por índice e por ponteiro — fazem a mesma coisa; a prova pode pedir qualquer uma.</p>
+          <p><strong>O que o código faz:</strong> troca o conteúdo de duas variáveis da <code>main</code>, usando uma terceira variável auxiliar para não perder o primeiro valor.</p>
+          <p><strong>Por que precisa de <code>aux</code>:</strong> se você escrevesse <code>*a = *b</code> direto, o valor original de <code>a</code> seria sobrescrito e não haveria como recuperá-lo.</p>
+          <p><strong>Se fosse por valor:</strong> com <code>int a, int b</code>, a função receberia cópias. A troca aconteceria de verdade, mas só dentro da função — ao voltar para a <code>main</code>, <code>x</code> e <code>y</code> continuariam 10 e 20. É o exemplo canônico de por que ponteiro existe.</p>
+          <p><strong>A versão C++ com referência:</strong> <code>void troca(int &amp;a, int &amp;b)</code> faz o mesmo sem <code>*</code> e sem <code>&amp;</code> na chamada — escreve-se <code>troca(x,y)</code> e o corpo vira <code>aux=a; a=b; b=aux;</code>. Se a prova pedir ponteiros, use a de cima; saber apontar a diferença costuma valer ponto.</p>
         </div>
       </div>
     </article>
 
     <!-- Q10 -->
     <article class="q" data-q="10">
-      <div class="q-head"><span class="q-num">10</span><h3 class="q-title">Inverter o vetor no lugar</h3><span class="q-src">Vetores + recursão</span></div>
-      <p class="q-task">Dois índices caminhando um em direção ao outro. <strong>Explique</strong> por que o vetor sai invertido da função mesmo ela sendo <code>void</code>.</p>
-<pre><code><span class="kw">void</span> inverte(<span class="kw">int</span> v[], <span class="kw">int</span> ini, <span class="kw">int</span> fim) {
-    <span class="kw">int</span> aux;
+      <div class="q-head"><span class="q-num">10</span><h3 class="q-title">Dois resultados de uma vez</h3><span class="q-src">Ponteiros + recursão</span></div>
+      <p class="q-task">Uma função <code>void</code> que acha o menor e o maior do vetor na mesma varredura recursiva. <strong>Explique</strong> como ela devolve dois valores sem ter <code>return</code>.</p>
+<pre><code><span class="kw">void</span> minMax(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i, <span class="kw">int</span> *menor, <span class="kw">int</span> *maior){
+	<span class="kw">if</span>(i==n)<span class="cm">//caso base: nada a fazer</span>
+		<span class="kw">return</span>;
 
-    <span class="kw">if</span> (ini &gt;= <span class="lb">1</span><input class="bl" id="q10b1" size="5" data-a="fim" aria-label="lacuna 1">)
-        <span class="kw">return</span>;                  <span class="cm">/* cruzaram: acabou */</span>
+	<span class="kw">if</span>(v[i]&lt;<span class="lb">1</span><input class="bl" id="q10b1" size="7" data-a="*menor" aria-label="lacuna 1">)
+		*menor = v[i];
 
-    aux = v[ini];
-    v[ini] = v[fim];
-    v[fim] = aux;
+	<span class="kw">if</span>(v[i]&gt;*maior)
+		<span class="lb">2</span><input class="bl" id="q10b2" size="7" data-a="*maior" aria-label="lacuna 2"> = v[i];
 
-    inverte(v, <span class="lb">2</span><input class="bl" id="q10b2" size="7" data-a="ini+1" aria-label="lacuna 2">, <span class="lb">3</span><input class="bl" id="q10b3" size="7" data-a="fim-1" aria-label="lacuna 3">);
+	minMax(v,n,<span class="lb">3</span><input class="bl" id="q10b3" size="5" data-a="i+1" aria-label="lacuna 3">,menor,maior);<span class="cm">//chamada recursiva</span>
 }
 
-<span class="cm">/* --- na main --- */</span>
-inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class="bl" id="q10b4" size="8" data-a="TAM-1|n-1" aria-label="lacuna 4">);</code></pre>
+<span class="cm">//--- na main ---</span>
+<span class="kw">int</span> menor=vetor[<span class="st">0</span>],maior=vetor[<span class="st">0</span>];
+minMax(vetor,TAM,<span class="st">1</span>,<span class="lb">4</span><input class="bl" id="q10b4" size="8" data-a="&amp;menor" aria-label="lacuna 4">,<span class="lb">5</span><input class="bl" id="q10b5" size="8" data-a="&amp;maior" aria-label="lacuna 5">);</code></pre>
       <div class="actions">
         <button class="primary" data-check="10">Conferir</button>
         <button data-show="10">Ver gabarito</button>
@@ -784,32 +903,31 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
       <div class="sol" id="s10" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
-          <span class="key"><i>1</i>fim</span><span class="key"><i>2</i>ini + 1</span><span class="key"><i>3</i>fim - 1</span><span class="key"><i>4</i>TAM - 1</span>
+          <span class="key"><i>1</i>*menor</span><span class="key"><i>2</i>*maior</span><span class="key"><i>3</i>i + 1</span><span class="key"><i>4</i>&amp;menor</span><span class="key"><i>5</i>&amp;maior</span>
         </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> troca o primeiro com o último, o segundo com o penúltimo, e assim por diante, até os índices se encontrarem no meio. O vetor fica invertido sem precisar de um segundo vetor.</p>
-          <p><strong>Caso base <code>ini &gt;= fim</code>:</strong> cobre os dois finais possíveis. Com tamanho par, os índices se cruzam (<code>ini &gt; fim</code>); com tamanho ímpar, eles se encontram no elemento do meio (<code>ini == fim</code>), que não precisa trocar de lugar com ninguém. Usar só <code>ini == fim</code> deixaria o caso par passar direto e a recursão sairia dos limites do vetor.</p>
-          <p><strong>Void mas altera:</strong> o parâmetro <code>int v[]</code> é um ponteiro para o vetor original — não existe cópia. Toda escrita em <code>v[ini]</code> acontece na memória da <code>main</code>. É exatamente a mesma razão pela qual a Questão 6 precisou de <code>&amp;</code> para inteiros simples: vetor já vai por referência, <code>int</code> não.</p>
-          <p><strong>Último índice é <code>TAM - 1</code>:</strong> um vetor de 10 posições vai de 0 a 9. Passar <code>TAM</code> acessa memória alheia.</p>
+          <p><strong>O que o código faz:</strong> varre o vetor uma única vez e atualiza, através de ponteiros, as variáveis <code>menor</code> e <code>maior</code> que vivem na <code>main</code>.</p>
+          <p><strong>Dois resultados sem <code>return</code>:</strong> uma função devolve no máximo um valor pelo <code>return</code>. Quando precisa entregar dois ou mais, recebe ponteiros (ou referências) e escreve direto na memória de quem chamou. Pelos quatro tipos do <code>func1.cpp</code>, ela é do 2º tipo — recebe e não retorna — mas ainda assim entrega resultado.</p>
+          <p><strong>Por que os dois começam em <code>vetor[0]</code>:</strong> inicializar com 0 quebraria com vetores só de negativos. Começando com um elemento real do vetor, a comparação sempre faz sentido. Por isso também a chamada parte do índice 1: o elemento 0 já foi considerado.</p>
+          <p><strong>Cuidado com a lacuna 1:</strong> escrever <code>v[i]&lt;menor</code> compararia um <code>int</code> com um endereço — o compilador reclama. Dentro da função, o valor é sempre <code>*menor</code>.</p>
         </div>
       </div>
     </article>
 
+    <p class="bloco">Bloco E · extras que o professor pode pedir</p>
+
     <!-- Q11 -->
     <article class="q" data-q="11">
-      <div class="q-head"><span class="q-num">11</span><h3 class="q-title">Soma total da matriz com duas recursões</h3><span class="q-src">Matrizes</span></div>
-      <p class="q-task">Uma função recursiva soma uma linha; a outra soma todas as linhas. <strong>Explique</strong> a diferença desta abordagem para a do índice linear da Questão 5.</p>
-<pre><code><span class="kw">int</span> somaLinha(<span class="kw">int</span> n, <span class="kw">int</span> m[n][n], <span class="kw">int</span> i, <span class="kw">int</span> j) {
-    <span class="kw">if</span> (j == n)
-        <span class="kw">return</span> <span class="st">0</span>;
-    <span class="kw">return</span> m[i][j] + somaLinha(n, m, i, <span class="lb">1</span><input class="bl" id="q11b1" size="5" data-a="j+1" aria-label="lacuna 1">);
+      <div class="q-head"><span class="q-num">11</span><h3 class="q-title">Soma do vetor andando com o ponteiro</h3><span class="q-src">Aritmética de ponteiros</span></div>
+      <p class="q-task">A mesma soma da Questão 4, sem índice nenhum: quem anda é o ponteiro. <strong>Explique</strong> a diferença entre <code>p+1</code> e <code>*p+1</code>.</p>
+<pre><code><span class="kw">int</span> somaPtr(<span class="kw">int</span> *p, <span class="kw">int</span> n){
+	<span class="kw">if</span>(n==<span class="st">0</span>)<span class="cm">//caso base ou trivial</span>
+		<span class="kw">return</span> <span class="st">0</span>;
+	<span class="kw">return</span> <span class="lb">1</span><input class="bl" id="q11b1" size="4" data-a="*p" aria-label="lacuna 1">+somaPtr(<span class="lb">2</span><input class="bl" id="q11b2" size="5" data-a="p+1" aria-label="lacuna 2">,<span class="lb">3</span><input class="bl" id="q11b3" size="5" data-a="n-1" aria-label="lacuna 3">);
 }
 
-<span class="kw">int</span> somaMatriz(<span class="kw">int</span> n, <span class="kw">int</span> m[n][n], <span class="kw">int</span> i) {
-    <span class="kw">if</span> (i == n)
-        <span class="kw">return</span> <span class="st">0</span>;
-    <span class="kw">return</span> somaLinha(n, m, i, <span class="lb">2</span><input class="bl" id="q11b2" size="3" data-a="0" aria-label="lacuna 2">) + somaMatriz(n, m, <span class="lb">3</span><input class="bl" id="q11b3" size="5" data-a="i+1" aria-label="lacuna 3">);
-}</code></pre>
+<span class="cm">//--- na main ---</span>
+cout&lt;&lt;<span class="st">"Soma = "</span>&lt;&lt;somaPtr(vetor,TAM)&lt;&lt;endl;<span class="cm">//sem &amp;: vetor ja e endereco</span></code></pre>
       <div class="actions">
         <button class="primary" data-check="11">Conferir</button>
         <button data-show="11">Ver gabarito</button>
@@ -818,37 +936,34 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
       <div class="sol" id="s11" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
-          <span class="key"><i>1</i>j + 1</span><span class="key"><i>2</i>0</span><span class="key"><i>3</i>i + 1</span>
+          <span class="key"><i>1</i>*p</span><span class="key"><i>2</i>p + 1</span><span class="key"><i>3</i>n - 1</span>
         </div>
         <div class="prose">
-          <p><strong>O que o código faz:</strong> devolve a soma de todos os elementos da matriz. <code>somaMatriz</code> cuida das linhas, <code>somaLinha</code> cuida das colunas de uma linha.</p>
-          <p><strong>Cada função tem seu caso base:</strong> <code>somaLinha</code> para quando <code>j == n</code> (acabou a linha); <code>somaMatriz</code> para quando <code>i == n</code> (acabaram as linhas). São duas recursões independentes, uma chamando a outra — não é recursão dupla no sentido do Fibonacci.</p>
-          <p><strong>A lacuna 2 é a pegadinha:</strong> <code>somaLinha</code> precisa recomeçar do zero em cada linha nova. Passar <code>j</code> ou <code>i</code> ali faria a soma pular colunas.</p>
-          <p><strong>Comparado ao índice linear:</strong> o <code>pos / n</code> e <code>pos % n</code> da Questão 5 resolve tudo numa função só, mas faz uma conta a cada chamada. A versão com duas funções é mais legível e aproveita a estrutura de linhas — útil quando você precisa de algo por linha (uma soma por linha, a média de cada linha). Ambas atendem à exigência de não usar laço.</p>
+          <p><strong>O que o código faz:</strong> soma <code>n</code> inteiros a partir do endereço <code>p</code>. Em vez de avançar um índice, avança o próprio ponteiro e diminui a quantidade que falta.</p>
+          <p><strong><code>p+1</code> × <code>*p+1</code>:</strong> <code>p+1</code> é o endereço do <em>próximo inteiro</em> — o compilador soma <code>sizeof(int)</code> bytes, não 1 byte. Já <code>*p+1</code> é o valor apontado mais um. Trocar um pelo outro é erro de prova garantido.</p>
+          <p><strong>Por que <code>somaPtr(vetor,TAM)</code> não leva <code>&amp;</code>:</strong> o nome do vetor já é o endereço do primeiro elemento. <code>vetor</code>, <code>&amp;vetor[0]</code> e o ponteiro <code>p</code> apontam para o mesmo lugar.</p>
+          <p><strong>Equivalência útil:</strong> <code>v[i]</code> é literalmente <code>*(v+i)</code>. As duas versões da soma — por índice e por ponteiro — fazem a mesma coisa; a prova pode pedir qualquer uma.</p>
         </div>
       </div>
     </article>
 
     <!-- Q12 -->
     <article class="q" data-q="12">
-      <div class="q-head"><span class="q-num">12</span><h3 class="q-title">Busca binária recursiva</h3><span class="q-src">Vetores + recursão</span></div>
-      <p class="q-task">Busca em vetor <strong>ordenado</strong>. <strong>Explique</strong> por que ela só funciona com o vetor ordenado e o que a função devolve quando não acha.</p>
-<pre><code><span class="kw">int</span> buscaBinaria(<span class="kw">int</span> v[], <span class="kw">int</span> ini, <span class="kw">int</span> fim, <span class="kw">int</span> chave) {
-    <span class="kw">int</span> meio;
+      <div class="q-head"><span class="q-num">12</span><h3 class="q-title">Inverter o vetor no lugar</h3><span class="q-src">Vetores + recursão</span></div>
+      <p class="q-task">Dois índices caminhando um em direção ao outro. <strong>Explique</strong> por que o vetor sai invertido mesmo a função sendo <code>void</code>.</p>
+<pre><code><span class="kw">void</span> inverte(<span class="kw">int</span> v[], <span class="kw">int</span> ini, <span class="kw">int</span> fim){
+	<span class="kw">if</span>(ini&gt;=<span class="lb">1</span><input class="bl" id="q12b1" size="5" data-a="fim" aria-label="lacuna 1">)<span class="cm">//caso base: cruzaram</span>
+		<span class="kw">return</span>;
 
-    <span class="kw">if</span> (ini &gt; fim)
-        <span class="kw">return</span> <span class="lb">1</span><input class="bl" id="q12b1" size="4" data-a="-1" aria-label="lacuna 1">;              <span class="cm">/* faixa vazia: não existe */</span>
+	<span class="kw">int</span> aux = v[ini];
+	v[ini] = v[fim];
+	v[fim] = aux;
 
-    meio = (ini + fim) / <span class="st">2</span>;
+	inverte(v,<span class="lb">2</span><input class="bl" id="q12b2" size="7" data-a="ini+1" aria-label="lacuna 2">,<span class="lb">3</span><input class="bl" id="q12b3" size="7" data-a="fim-1" aria-label="lacuna 3">);<span class="cm">//chamada recursiva</span>
+}
 
-    <span class="kw">if</span> (v[meio] == chave)
-        <span class="kw">return</span> <span class="lb">2</span><input class="bl" id="q12b2" size="5" data-a="meio" aria-label="lacuna 2">;
-
-    <span class="kw">if</span> (chave &lt; v[meio])
-        <span class="kw">return</span> buscaBinaria(v, ini, <span class="lb">3</span><input class="bl" id="q12b3" size="8" data-a="meio-1" aria-label="lacuna 3">, chave);
-
-    <span class="kw">return</span> buscaBinaria(v, <span class="lb">4</span><input class="bl" id="q12b4" size="8" data-a="meio+1" aria-label="lacuna 4">, fim, chave);
-}</code></pre>
+<span class="cm">//--- na main ---</span>
+inverte(vetor,<span class="st">0</span>,<span class="lb">4</span><input class="bl" id="q12b4" size="8" data-a="TAM-1|n-1" aria-label="lacuna 4">);</code></pre>
       <div class="actions">
         <button class="primary" data-check="12">Conferir</button>
         <button data-show="12">Ver gabarito</button>
@@ -857,13 +972,84 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
       <div class="sol" id="s12" hidden>
         <h4>Gabarito</h4>
         <div class="keys">
+          <span class="key"><i>1</i>fim</span><span class="key"><i>2</i>ini + 1</span><span class="key"><i>3</i>fim - 1</span><span class="key"><i>4</i>TAM - 1</span>
+        </div>
+        <div class="prose">
+          <p><strong>O que o código faz:</strong> troca o primeiro com o último, o segundo com o penúltimo, e assim por diante, até os índices se encontrarem no meio. O vetor fica invertido sem precisar de um segundo vetor.</p>
+          <p><strong>Caso base <code>ini&gt;=fim</code>:</strong> cobre os dois finais possíveis. Com tamanho par, os índices se cruzam (<code>ini&gt;fim</code>); com tamanho ímpar, eles se encontram no elemento do meio (<code>ini==fim</code>), que não precisa trocar de lugar com ninguém. Usar só <code>ini==fim</code> deixaria o caso par passar direto e a recursão sairia dos limites do vetor.</p>
+          <p><strong>Void mas altera:</strong> o parâmetro <code>int v[]</code> é um ponteiro para o vetor original — não existe cópia. Toda escrita em <code>v[ini]</code> acontece na memória da <code>main</code>. É a mesma razão pela qual a Questão 9 precisou de <code>&amp;</code> para inteiros simples: vetor já vai por referência, <code>int</code> não.</p>
+          <p><strong>Último índice é <code>TAM-1</code>:</strong> um vetor de 10 posições vai de 0 a 9. Passar <code>TAM</code> acessa memória alheia.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Q13 -->
+    <article class="q" data-q="13">
+      <div class="q-head"><span class="q-num">13</span><h3 class="q-title">Soma total da matriz com duas recursões</h3><span class="q-src">Matrizes</span></div>
+      <p class="q-task">Uma função soma uma linha; a outra soma todas as linhas. <strong>Explique</strong> a diferença desta abordagem para a do índice linear da Questão 8.</p>
+<pre><code><span class="kw">int</span> somaLinha(<span class="kw">int</span> m[][MAX], <span class="kw">int</span> n, <span class="kw">int</span> i, <span class="kw">int</span> j){
+	<span class="kw">if</span>(j==n)<span class="cm">//caso base: acabou a linha</span>
+		<span class="kw">return</span> <span class="st">0</span>;
+	<span class="kw">return</span> m[i][j]+somaLinha(m,n,i,<span class="lb">1</span><input class="bl" id="q13b1" size="5" data-a="j+1" aria-label="lacuna 1">);
+}
+
+<span class="kw">int</span> somaMatriz(<span class="kw">int</span> m[][MAX], <span class="kw">int</span> n, <span class="kw">int</span> i){
+	<span class="kw">if</span>(i==n)<span class="cm">//caso base: acabaram as linhas</span>
+		<span class="kw">return</span> <span class="st">0</span>;
+	<span class="kw">return</span> somaLinha(m,n,i,<span class="lb">2</span><input class="bl" id="q13b2" size="3" data-a="0" aria-label="lacuna 2">)+somaMatriz(m,n,<span class="lb">3</span><input class="bl" id="q13b3" size="5" data-a="i+1" aria-label="lacuna 3">);
+}</code></pre>
+      <div class="actions">
+        <button class="primary" data-check="13">Conferir</button>
+        <button data-show="13">Ver gabarito</button>
+        <span class="verdict" id="v13"></span>
+      </div>
+      <div class="sol" id="s13" hidden>
+        <h4>Gabarito</h4>
+        <div class="keys">
+          <span class="key"><i>1</i>j + 1</span><span class="key"><i>2</i>0</span><span class="key"><i>3</i>i + 1</span>
+        </div>
+        <div class="prose">
+          <p><strong>O que o código faz:</strong> devolve a soma de todos os elementos da matriz. <code>somaMatriz</code> cuida das linhas, <code>somaLinha</code> cuida das colunas de uma linha.</p>
+          <p><strong>Cada função tem seu caso base:</strong> <code>somaLinha</code> para quando <code>j==n</code>; <code>somaMatriz</code> para quando <code>i==n</code>. São duas recursões independentes, uma chamando a outra.</p>
+          <p><strong>A lacuna 2 é a pegadinha:</strong> <code>somaLinha</code> precisa recomeçar do zero em cada linha nova. Passar <code>j</code> ou <code>i</code> ali faria a soma pular colunas.</p>
+          <p><strong>Comparado ao índice linear:</strong> o <code>pos/n</code> e <code>pos%n</code> da Questão 8 resolve tudo numa função só, mas faz uma conta a cada chamada. A versão com duas funções é mais legível e aproveita a estrutura de linhas — útil quando você precisa de algo por linha (uma soma por linha, a média de cada linha). Ambas atendem à exigência de não usar laço.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Q14 -->
+    <article class="q" data-q="14">
+      <div class="q-head"><span class="q-num">14</span><h3 class="q-title">Busca binária recursiva</h3><span class="q-src">Vetores + recursão</span></div>
+      <p class="q-task">Busca em vetor <strong>ordenado</strong>. <strong>Explique</strong> por que ela só funciona com o vetor ordenado e o que devolve quando não acha.</p>
+<pre><code><span class="kw">int</span> buscaBinaria(<span class="kw">int</span> v[], <span class="kw">int</span> ini, <span class="kw">int</span> fim, <span class="kw">int</span> chave){
+	<span class="kw">if</span>(ini&gt;fim)<span class="cm">//caso base: faixa vazia</span>
+		<span class="kw">return</span> <span class="lb">1</span><input class="bl" id="q14b1" size="4" data-a="-1" aria-label="lacuna 1">;
+
+	<span class="kw">int</span> meio = (ini+fim)/<span class="st">2</span>;
+
+	<span class="kw">if</span>(v[meio]==chave)
+		<span class="kw">return</span> <span class="lb">2</span><input class="bl" id="q14b2" size="5" data-a="meio" aria-label="lacuna 2">;
+
+	<span class="kw">if</span>(chave&lt;v[meio])
+		<span class="kw">return</span> buscaBinaria(v,ini,<span class="lb">3</span><input class="bl" id="q14b3" size="8" data-a="meio-1" aria-label="lacuna 3">,chave);
+
+	<span class="kw">return</span> buscaBinaria(v,<span class="lb">4</span><input class="bl" id="q14b4" size="8" data-a="meio+1" aria-label="lacuna 4">,fim,chave);
+}</code></pre>
+      <div class="actions">
+        <button class="primary" data-check="14">Conferir</button>
+        <button data-show="14">Ver gabarito</button>
+        <span class="verdict" id="v14"></span>
+      </div>
+      <div class="sol" id="s14" hidden>
+        <h4>Gabarito</h4>
+        <div class="keys">
           <span class="key"><i>1</i>-1</span><span class="key"><i>2</i>meio</span><span class="key"><i>3</i>meio - 1</span><span class="key"><i>4</i>meio + 1</span>
         </div>
         <div class="prose">
           <p><strong>O que o código faz:</strong> procura <code>chave</code> olhando o elemento do meio e descartando metade do vetor a cada chamada. Devolve o índice onde encontrou, ou −1.</p>
           <p><strong>Por que precisa estar ordenado:</strong> a decisão de ir para a esquerda ou para a direita só é confiável se todos os elementos antes do meio forem menores e todos depois forem maiores. Em vetor desordenado, a metade descartada poderia conter a chave.</p>
           <p><strong>Por que −1:</strong> índices válidos vão de 0 para cima, então −1 é um valor impossível e serve como sinal de "não encontrado". Devolver 0 seria ambíguo — 0 é uma posição real.</p>
-          <p><strong>Os <code>±1</code> importam:</strong> o elemento do meio já foi testado e não é a chave, então ele fica de fora das duas faixas seguintes. Escrever <code>meio</code> em vez de <code>meio - 1</code> faz a faixa nunca encolher quando a chave não existe — recursão infinita.</p>
+          <p><strong>Os ±1 importam:</strong> o elemento do meio já foi testado e não é a chave, então fica de fora das duas faixas seguintes. Escrever <code>meio</code> em vez de <code>meio-1</code> faz a faixa nunca encolher quando a chave não existe — recursão infinita.</p>
           <p><strong>Ganho:</strong> a cada chamada o problema cai pela metade. Num vetor de 1000 posições, no máximo 10 chamadas; a busca linear faria 1000.</p>
         </div>
       </div>
@@ -877,16 +1063,16 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
 
     <article class="q">
       <div class="q-head"><span class="q-num">T1</span><h3 class="q-title">Simule com <code>f(472)</code></h3></div>
-<pre><code><span class="kw">int</span> f(<span class="kw">int</span> n) {
-    <span class="kw">if</span> (n == <span class="st">0</span>)
-        <span class="kw">return</span> <span class="st">0</span>;
-    <span class="kw">return</span> n % <span class="st">10</span> + f(n / <span class="st">10</span>);
+<pre><code><span class="kw">int</span> f(<span class="kw">int</span> n){
+	<span class="kw">if</span>(n==<span class="st">0</span>)
+		<span class="kw">return</span> <span class="st">0</span>;
+	<span class="kw">return</span> n%<span class="st">10</span>+f(n/<span class="st">10</span>);
 }</code></pre>
       <div class="actions"><button data-show="t1">Ver resposta</button></div>
       <div class="sol" id="st1" hidden>
         <h4>Resposta</h4>
         <div class="prose">
-          <p><strong>Soma os dígitos do número.</strong> <code>n % 10</code> extrai o último dígito, <code>n / 10</code> remove esse dígito. A recursão vai comendo o número pela direita até sobrar 0.</p>
+          <p><strong>Soma os dígitos do número.</strong> <code>n%10</code> extrai o último dígito, <code>n/10</code> remove esse dígito. A recursão vai comendo o número pela direita até sobrar 0.</p>
           <p><code>f(472) = 2 + f(47) = 2 + 7 + f(4) = 2 + 7 + 4 + f(0) = 13</code>.</p>
         </div>
       </div>
@@ -894,82 +1080,81 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
 
     <article class="q">
       <div class="q-head"><span class="q-num">T2</span><h3 class="q-title">Simule com <code>g(10)</code></h3></div>
-<pre><code><span class="kw">void</span> g(<span class="kw">int</span> n) {
-    <span class="kw">if</span> (n == <span class="st">0</span>)
-        <span class="kw">return</span>;
-    g(n / <span class="st">2</span>);                  <span class="cm">/* chamada ANTES do printf */</span>
-    printf(<span class="st">"%d"</span>, n % <span class="st">2</span>);
+<pre><code><span class="kw">void</span> g(<span class="kw">int</span> n){
+	<span class="kw">if</span>(n==<span class="st">0</span>)
+		<span class="kw">return</span>;
+	g(n/<span class="st">2</span>);<span class="cm">//chamada ANTES do cout</span>
+	cout&lt;&lt;n%<span class="st">2</span>;
 }</code></pre>
       <div class="actions"><button data-show="t2">Ver resposta</button></div>
       <div class="sol" id="st2" hidden>
         <h4>Resposta</h4>
         <div class="prose">
           <p><strong>Imprime o número em binário.</strong> <code>g(10)</code> escreve <code>1010</code>.</p>
-          <p>O detalhe que a prova quer: o <code>printf</code> vem <em>depois</em> da chamada recursiva, então nada é impresso na ida — as chamadas empilham até <code>n</code> virar 0 e a impressão acontece na volta, invertendo a ordem dos restos. Se o <code>printf</code> viesse antes, sairia <code>0101</code>, o binário de trás para frente.</p>
+          <p>O detalhe que a prova quer: o <code>cout</code> vem <em>depois</em> da chamada recursiva, então nada é impresso na ida — as chamadas empilham até <code>n</code> virar 0 e a impressão acontece na volta, invertendo a ordem dos restos. Se o <code>cout</code> viesse antes, sairia <code>0101</code>, o binário de trás para frente.</p>
         </div>
       </div>
     </article>
 
     <article class="q">
       <div class="q-head"><span class="q-num">T3</span><h3 class="q-title">O que <code>h</code> devolve?</h3></div>
-<pre><code><span class="kw">int</span> h(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i, <span class="kw">int</span> x) {
-    <span class="kw">if</span> (i == n)
-        <span class="kw">return</span> <span class="st">0</span>;
-    <span class="kw">return</span> (v[i] == x) + h(v, n, i + <span class="st">1</span>, x);
+<pre><code><span class="kw">int</span> h(<span class="kw">int</span> v[], <span class="kw">int</span> n, <span class="kw">int</span> i, <span class="kw">int</span> x){
+	<span class="kw">if</span>(i==n)
+		<span class="kw">return</span> <span class="st">0</span>;
+	<span class="kw">return</span> (v[i]==x)+h(v,n,i+<span class="st">1</span>,x);
 }</code></pre>
       <div class="actions"><button data-show="t3">Ver resposta</button></div>
       <div class="sol" id="st3" hidden>
         <h4>Resposta</h4>
         <div class="prose">
-          <p><strong>Conta quantas vezes o valor <code>x</code> aparece no vetor.</strong> A expressão <code>(v[i] == x)</code> vale 1 quando verdadeira e 0 quando falsa, então ela soma 1 a cada acerto.</p>
-          <p>É a mesma técnica da Questão 5, aplicada a um vetor em vez de matriz. Se devolver 0, o valor não está no vetor.</p>
+          <p><strong>Conta quantas vezes o valor <code>x</code> aparece no vetor.</strong> A comparação <code>(v[i]==x)</code> devolve <code>true</code> ou <code>false</code>, que viram 1 e 0 na soma — então ela soma 1 a cada acerto.</p>
+          <p>É a mesma técnica da Questão 8, aplicada a um vetor em vez de matriz. Se devolver 0, o valor não está no vetor.</p>
         </div>
       </div>
     </article>
 
     <article class="q">
       <div class="q-head"><span class="q-num">T4</span><h3 class="q-title">O que acontece com a matriz?</h3></div>
-<pre><code><span class="kw">void</span> t(<span class="kw">int</span> n, <span class="kw">int</span> m[n][n], <span class="kw">int</span> i, <span class="kw">int</span> j) {
-    <span class="kw">int</span> aux;
+<pre><code><span class="kw">void</span> t(<span class="kw">int</span> m[][MAX], <span class="kw">int</span> n, <span class="kw">int</span> i, <span class="kw">int</span> j){
+	<span class="kw">if</span>(i==n) <span class="kw">return</span>;
+	<span class="kw">if</span>(j==n){ t(m,n,i+<span class="st">1</span>,<span class="st">0</span>); <span class="kw">return</span>; }
 
-    <span class="kw">if</span> (i == n) <span class="kw">return</span>;
-    <span class="kw">if</span> (j == n) { t(n, m, i + <span class="st">1</span>, <span class="st">0</span>); <span class="kw">return</span>; }
-
-    <span class="kw">if</span> (i &lt; j) {
-        aux = m[i][j];
-        m[i][j] = m[j][i];
-        m[j][i] = aux;
-    }
-    t(n, m, i, j + <span class="st">1</span>);
+	<span class="kw">if</span>(i&lt;j){
+		<span class="kw">int</span> aux = m[i][j];
+		m[i][j] = m[j][i];
+		m[j][i] = aux;
+	}
+	t(m,n,i,j+<span class="st">1</span>);
 }</code></pre>
       <div class="actions"><button data-show="t4">Ver resposta</button></div>
       <div class="sol" id="st4" hidden>
         <h4>Resposta</h4>
         <div class="prose">
           <p><strong>Transpõe a matriz</strong> — troca linhas por colunas, refletindo tudo em torno da diagonal principal.</p>
-          <p>Dois detalhes valem ponto. O <code>if (j == n)</code> é o "pulo de linha": zera a coluna e avança a linha, o percurso sistemático que a Questão 4 da lista descreve. E o <code>if (i &lt; j)</code> garante que cada par seja trocado <em>uma única vez</em>: sem ele, o par (0,1) seria trocado e depois destrocado em (1,0), e a matriz voltaria ao que era.</p>
+          <p>Dois detalhes valem ponto. O <code>if(j==n)</code> é o "pulo de linha": zera a coluna e avança a linha, o percurso sistemático que a Questão 4 da lista descreve. E o <code>if(i&lt;j)</code> garante que cada par seja trocado <em>uma única vez</em>: sem ele, o par (0,1) seria trocado e depois destrocado em (1,0), e a matriz voltaria ao que era.</p>
         </div>
       </div>
     </article>
 
     <article class="q">
       <div class="q-head"><span class="q-num">T5</span><h3 class="q-title">O que é impresso?</h3></div>
-<pre><code><span class="kw">void</span> a(<span class="kw">int</span> x)  { x = x * <span class="st">2</span>; }
-<span class="kw">void</span> b(<span class="kw">int</span> *x) { *x = *x * <span class="st">2</span>; }
+<pre><code><span class="kw">void</span> a(<span class="kw">int</span> x){ x = x*<span class="st">2</span>; }
+<span class="kw">void</span> b(<span class="kw">int</span> *x){ *x = *x*<span class="st">2</span>; }
+<span class="kw">void</span> c(<span class="kw">int</span> &amp;x){ x = x*<span class="st">2</span>; }
 
-<span class="kw">int</span> main(<span class="kw">void</span>) {
-    <span class="kw">int</span> v = <span class="st">5</span>;
-    a(v);   printf(<span class="st">"%d "</span>, v);
-    b(&amp;v);  printf(<span class="st">"%d\n"</span>, v);
-    <span class="kw">return</span> <span class="st">0</span>;
+<span class="kw">int</span> main(){
+	<span class="kw">int</span> v = <span class="st">5</span>;
+	a(v);   cout&lt;&lt;v&lt;&lt;<span class="st">" "</span>;
+	b(&amp;v);  cout&lt;&lt;v&lt;&lt;<span class="st">" "</span>;
+	c(v);   cout&lt;&lt;v&lt;&lt;endl;
 }</code></pre>
       <div class="actions"><button data-show="t5">Ver resposta</button></div>
       <div class="sol" id="st5" hidden>
         <h4>Resposta</h4>
         <div class="prose">
-          <p><strong>Imprime <code>5 10</code>.</strong></p>
-          <p><code>a</code> recebe uma cópia de <code>v</code>: dobra a cópia, a cópia morre no fim da função e <code>v</code> continua 5. <code>b</code> recebe o endereço: <code>*x = *x * 2</code> escreve na própria variável da <code>main</code>, que passa a valer 10.</p>
-          <p>Se a prova pedir uma frase só: passagem por valor não altera o original; passagem por referência, via ponteiro, altera.</p>
+          <p><strong>Imprime <code>5 10 20</code>.</strong></p>
+          <p><code>a</code> recebe uma cópia de <code>v</code>: dobra a cópia, a cópia morre no fim da função e <code>v</code> continua 5. <code>b</code> recebe o endereço e <code>*x = *x*2</code> escreve na própria variável da <code>main</code>, que passa a valer 10. <code>c</code> recebe uma <em>referência</em> — outro nome para a mesma variável — e chega ao mesmo resultado sem <code>*</code> nem <code>&amp;</code> na chamada, dobrando para 20.</p>
+          <p>A pegadinha é a terceira: <code>c(v)</code> parece passagem por valor, mas o <code>&amp;</code> na declaração do parâmetro muda tudo. Sempre olhe a assinatura da função, não a chamada.</p>
         </div>
       </div>
     </article>
@@ -982,17 +1167,20 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
 
     <div class="check" style="padding-inline:20px">
       <ul class="clean">
-        <li><b>Esquecer o caso base</b>A função chama a si mesma para sempre até a pilha estourar (<em>segmentation fault</em>). Escreva o <code>if</code> de parada <strong>antes</strong> do passo recursivo, sempre.</li>
-        <li><b>Caso base que nunca é alcançado</b><span class="bad">return f(n);</span> em vez de <span class="good">return f(n - 1);</span> — o problema precisa diminuir a cada chamada.</li>
+        <li><b>Esquecer o caso base</b>A função chama a si mesma para sempre até a pilha estourar. Escreva o <code>if</code> de parada <strong>antes</strong> da chamada recursiva, sempre — e comente <code>//caso base ou trivial</code>, do jeito que o professor faz.</li>
+        <li><b>Caso base que nunca é alcançado</b><span class="bad">return n*fatorial(n);</span> em vez de <span class="good">return n*fatorial(n-1);</span> — o problema precisa diminuir a cada chamada.</li>
         <li><b>Devolver o valor errado no caso base</b>Soma e contagem devolvem <code>0</code>; produto e potência devolvem <code>1</code>; busca que não achou devolve <code>-1</code>.</li>
-        <li><b>Matriz sem a segunda dimensão</b><span class="bad">int f(int m[][], int n)</span> não compila. Use <span class="good">int f(int n, int m[n][n], int i)</span> com <code>n</code> antes, ou fixe o tamanho: <code>int m[][12]</code>.</li>
-        <li><b>Usar <code>&amp;</code> onde não precisa</b>Vetor e matriz já são endereços: <span class="good">soma(vetor, n)</span>, e não <span class="bad">soma(&amp;vetor, n)</span>. Mas no <code>scanf</code> de um inteiro o <code>&amp;</code> é obrigatório: <span class="good">scanf("%d", &amp;n)</span>.</li>
-        <li><b>Confundir <code>*p</code> com <code>p</code></b>Dentro da função, o valor é <code>*menor</code>; <code>menor</code> sozinho é o endereço. E <code>p + 1</code> anda uma posição, <code>*p + 1</code> soma um ao valor.</li>
-        <li><b>Estourar os limites do vetor ou da matriz</b>Um vetor de 10 vai de 0 a 9. Diagonal secundária é <code>n - 1 - i</code>, nunca <code>n - i</code>.</li>
-        <li><b><code>%d</code> para <code>float</code></b>Real usa <code>%f</code> (ou <code>%.2f</code>) no <code>printf</code> e <code>%f</code> no <code>scanf</code>. Trocar imprime lixo.</li>
-        <li><b>Declarar a matriz antes de ler a ordem</b>Com VLA, <code>scanf("%d", &amp;n)</code> vem primeiro; só depois <code>int m[n][n];</code>.</li>
+        <li><b>Função definida depois da <code>main</code> sem protótipo</b>Se você seguir a ordem do professor — funções primeiro, <code>main</code> por último — nunca dá erro. Se inverter, declare <code>int fatorial(int n);</code> no topo.</li>
+        <li><b>Função <code>int</code> sem <code>return</code></b>Um <code>if</code> com <code>return</code> e o resto do caminho sem nenhum devolve lixo. Toda saída possível da função precisa devolver algo.</li>
+        <li><b>Declarar a matriz com a ordem digitada</b><span class="bad">cin&gt;&gt;n; int m[n][n];</span> não é C++ padrão — pode compilar no g++ e ser recusado na correção. Use <span class="good">const int MAX=20; int m[MAX][MAX];</span> e trabalhe só no quadrado de lado <code>n</code>.</li>
+        <li><b>Matriz sem a segunda dimensão no parâmetro</b><span class="bad">int f(int m[][], int n)</span> não compila. O certo é <span class="good">int f(int m[][MAX], int n, int i)</span>.</li>
+        <li><b>Colocar <code>&amp;</code> no <code>cin</code></b>Ao contrário do <code>scanf</code> do C, aqui é <span class="good">cin&gt;&gt;n;</span>. E em vetor e matriz nada de <code>&amp;</code> em lugar nenhum: <span class="good">somaVetor(vetor,TAM,0)</span>.</li>
+        <li><b>Confundir <code>*p</code> com <code>p</code></b>Dentro da função, o valor é <code>*menor</code>; <code>menor</code> sozinho é o endereço. E <code>p+1</code> anda uma posição, <code>*p+1</code> soma um ao valor.</li>
+        <li><b>Estourar os limites do vetor ou da matriz</b>Um vetor de 10 vai de 0 a 9. Diagonal secundária é <code>n-1-i</code>, nunca <code>n-i</code>.</li>
+        <li><b>Esquecer os <code>#include</code></b><code>&lt;iostream&gt;</code> para <code>cin</code>/<code>cout</code>, <code>&lt;iomanip&gt;</code> para <code>setw</code> e <code>setprecision</code>, <code>&lt;cstdlib&gt;</code> para <code>rand</code>, <code>&lt;ctime&gt;</code> para <code>time</code>, <code>&lt;cmath&gt;</code> para <code>sqrt</code>.</li>
+        <li><b>Divisão inteira sem perceber</b><code>5/2</code> vale 2, não 2.5. Isso é proposital em <code>pos/n</code>, mas vira erro numa média: use <code>(float)soma/total</code>.</li>
         <li><b>Chamar <code>srand(time(NULL))</code> dentro do laço</b>Uma vez só, no começo da <code>main</code>. Dentro do laço, todos os sorteios saem iguais.</li>
-        <li><b>Laço dentro da função recursiva</b>O enunciado proíbe. Se apareceu um <code>for</code> lá dentro, transforme o contador do laço em parâmetro da função.</li>
+        <li><b>Laço dentro da função recursiva</b>O enunciado proíbe. Se apareceu um <code>for</code> lá dentro, transforme o contador do laço em parâmetro da função — foi exatamente isso que aconteceu entre o <code>fatit.cpp</code> e o <code>fatrecurs.cpp</code>.</li>
       </ul>
     </div>
   </section>
@@ -1003,31 +1191,32 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
     <p class="sec-sub">Rode esta lista em cada questão da prova. Leva um minuto e pega quase todo erro de distração.</p>
 
     <div class="check">
-      <label><input type="checkbox" id="c1"><span>A função recursiva tem caso base e ele aparece antes do passo recursivo.</span></label>
+      <label><input type="checkbox" id="c1"><span>A função recursiva tem caso base e ele aparece antes da chamada recursiva.</span></label>
       <label><input type="checkbox" id="c2"><span>O argumento muda a cada chamada de um jeito que leva ao caso base.</span></label>
       <label><input type="checkbox" id="c3"><span>O valor devolvido no caso base é neutro para a operação (0 para soma, 1 para produto).</span></label>
       <label><input type="checkbox" id="c4"><span>Não há <code>for</code>, <code>while</code> ou <code>do...while</code> dentro de nenhuma função recursiva.</span></label>
       <label><input type="checkbox" id="c5"><span>A <code>main</code> só faz entrada, chamadas e exibição — o processamento está nas funções.</span></label>
-      <label><input type="checkbox" id="c6"><span>Todos os protótipos estão declarados antes da <code>main</code>.</span></label>
-      <label><input type="checkbox" id="c7"><span>A matriz é recebida com a ordem <code>n</code> antes dela na lista de parâmetros.</span></label>
-      <label><input type="checkbox" id="c8"><span>Índices respeitam os limites: último elemento é <code>n - 1</code>.</span></label>
-      <label><input type="checkbox" id="c9"><span><code>srand(time(NULL))</code> aparece uma única vez, no início.</span></label>
-      <label><input type="checkbox" id="c10"><span>Os <code>printf</code> usam o especificador certo para cada tipo.</span></label>
-      <label><input type="checkbox" id="c11"><span>A matriz é exibida em formato de matriz, com quebra de linha ao fim de cada linha.</span></label>
-      <label><input type="checkbox" id="c12"><span>Há mensagem adequada para o caso em que nada é encontrado.</span></label>
-      <label><input type="checkbox" id="c13"><span>Os comentários explicam o caso base e o passo recursivo, e os nomes das variáveis dizem o que elas guardam.</span></label>
-      <label><input type="checkbox" id="c14"><span>Testei com caso-limite: vetor com valores repetidos, matriz de ordem 1, valor procurado que não existe.</span></label>
+      <label><input type="checkbox" id="c6"><span>As funções estão definidas antes da <code>main</code> (ou têm protótipo no topo).</span></label>
+      <label><input type="checkbox" id="c7"><span>Toda função com tipo de retorno devolve valor em todos os caminhos.</span></label>
+      <label><input type="checkbox" id="c8"><span>A matriz usa <code>const int MAX</code> e é recebida como <code>int m[][MAX]</code>, com <code>n</code> como parâmetro à parte.</span></label>
+      <label><input type="checkbox" id="c9"><span>Índices respeitam os limites: último elemento é <code>n-1</code>.</span></label>
+      <label><input type="checkbox" id="c10"><span><code>srand(time(NULL))</code> aparece uma única vez, no início.</span></label>
+      <label><input type="checkbox" id="c11"><span>Os <code>#include</code> cobrem tudo que o programa usa, e há <code>using namespace std;</code>.</span></label>
+      <label><input type="checkbox" id="c12"><span>A matriz é exibida em formato de matriz, com <code>setw</code> e quebra ao fim de cada linha.</span></label>
+      <label><input type="checkbox" id="c13"><span>Há mensagem adequada para o caso em que nada é encontrado.</span></label>
+      <label><input type="checkbox" id="c14"><span>Os comentários marcam o caso base e a chamada recursiva, e os nomes das variáveis dizem o que elas guardam.</span></label>
+      <label><input type="checkbox" id="c15"><span>Testei com caso-limite: vetor com valores repetidos, matriz de ordem 1, valor procurado que não existe.</span></label>
     </div>
   </section>
 
   <footer>
-    Material montado a partir da Lista de Exercícios APEX — Vetores, Matrizes e Funções Recursivas. As questões 1 a 5 seguem os enunciados originais; as demais cobrem funções, parâmetros e ponteiros no mesmo formato de prova.
+    Material montado a partir da Lista de Exercícios APEX — Vetores, Matrizes e Funções Recursivas — e dos arquivos da aula <code>func1.cpp</code>, <code>fatit.cpp</code> e <code>fatrecurs.cpp</code>. Os enunciados são os da lista; o código está em C++, no estilo do professor.
   </footer>
 </div>
 
 <script>
 (function(){
-  var KEY = "apex-simulado-v1";
+  var KEY = "apex-simulado-v3";
 
   function norm(s){
     return String(s || "").toLowerCase().replace(/\s+/g, "").replace(/;+$/, "");
@@ -1039,6 +1228,7 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
   }
 
   var blanks = Array.prototype.slice.call(document.querySelectorAll(".bl"));
+  var boxes = Array.prototype.slice.call(document.querySelectorAll(".check input[type=checkbox]"));
   var scoreEl = document.getElementById("score");
 
   function updateScore(){
@@ -1052,9 +1242,7 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
     try {
       var data = {};
       blanks.forEach(function(b){ if (b.value) data[b.id] = b.value; });
-      document.querySelectorAll(".check input[type=checkbox]").forEach(function(c){
-        if (c.checked) data[c.id] = 1;
-      });
+      boxes.forEach(function(c){ if (c.checked) data[c.id] = 1; });
       localStorage.setItem(KEY, JSON.stringify(data));
     } catch (e) {}
   }
@@ -1079,13 +1267,10 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
       save();
     });
   });
-
-  document.querySelectorAll(".check input[type=checkbox]").forEach(function(c){
-    c.addEventListener("change", save);
-  });
+  boxes.forEach(function(c){ c.addEventListener("change", save); });
 
   /* ---- conferir uma questão ---- */
-  document.querySelectorAll("[data-check]").forEach(function(btn){
+  Array.prototype.forEach.call(document.querySelectorAll("[data-check]"), function(btn){
     btn.addEventListener("click", function(){
       var q = btn.getAttribute("data-check");
       var art = document.querySelector('.q[data-q="' + q + '"]');
@@ -1106,7 +1291,7 @@ inverte(vetor, <span class="st">0</span>, <span class="lb">4</span><input class=
   });
 
   /* ---- abrir/fechar gabarito ---- */
-  document.querySelectorAll("[data-show]").forEach(function(btn){
+  Array.prototype.forEach.call(document.querySelectorAll("[data-show]"), function(btn){
     btn.addEventListener("click", function(){
       var alvo = document.getElementById("s" + btn.getAttribute("data-show"));
       alvo.hidden = !alvo.hidden;
