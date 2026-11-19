@@ -21,13 +21,13 @@
   #info td:last-child { text-align:right; font-variant-numeric:tabular-nums; }
   .sw { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; vertical-align:-1px; }
   #info .note { color:var(--muted); font-size:11.5px; line-height:1.45; margin:10px 0 0; }
-  #controls { bottom:16px; left:50%; transform:translateX(-50%); padding:8px; display:flex; gap:6px; flex-wrap:wrap; justify-content:center; max-width:calc(100% - 32px); }
-  #controls button { font:inherit; font-size:13px; padding:7px 12px; border-radius:7px; border:1px solid var(--line);
+  #controls { bottom:16px; left:50%; transform:translateX(-50%); padding:6px; display:flex; gap:4px; flex-wrap:nowrap; overflow-x:auto; width:max-content; max-width:calc(100% - 32px); }
+  #controls button { font:inherit; font-size:13px; padding:7px 10px; white-space:nowrap; border-radius:7px; border:1px solid var(--line);
     background:#fff; color:var(--ink); cursor:pointer; }
   #controls button:hover { background:#f1f5f9; }
   #controls button.on { background:var(--ink); color:#fff; border-color:var(--ink); }
   #hint { top:16px; right:16px; padding:8px 12px; font-size:12px; color:var(--muted); }
-  @media (max-width:640px){ #info{ width:auto; right:16px; padding:10px 12px;} #info table,#info .note{display:none;} #hint{display:none;} }
+  @media (max-width:640px){ #controls{ left:16px; right:16px; transform:none; width:auto; }  #info{ width:auto; right:16px; padding:10px 12px;} #info .note{display:none;} #info table{font-size:12px;} #hint{display:none;} }
 </style>
 <script type="importmap">
 { "imports": {
@@ -62,6 +62,7 @@
   <button data-view="front">Entrada</button>
   <button data-view="bath">Banheiro</button>
   <button id="cut">Paredes baixas</button>
+  <button id="medidas" class="on">Medidas</button>
   <button id="labels" class="on">Rótulos</button>
 </div>
 
@@ -90,7 +91,7 @@ const camera = new THREE.PerspectiveCamera(42, innerWidth/innerHeight, 0.1, 200)
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI * 0.495;
-controls.minDistance = 2; controls.maxDistance = 40;
+controls.minDistance = 2; controls.maxDistance = 60;
 
 // Centraliza a casa na origem
 const house = new THREE.Group();
@@ -372,36 +373,51 @@ function label(text, sub, x, z, scale=1, rot=0) {
   m.rotation.x = -Math.PI/2; m.rotation.z = rot; m.position.set(x, 0.02, z); m.renderOrder = 2;
   labels.add(m);
 }
-label('COZINHA', '20,00 m²', 1.6, 0.95);
+label('COZINHA', '4,00 × 5,00 m', 1.6, 0.95);
 label('BANHEIRO', '3,00 × 1,50 m', X_BATH/2 - 0.2, 5.75, 0.5);
-label('QUARTO', '22,00 m²', 1.6, 8.0);
+label('QUARTO', '4,00 × 5,50 m', 1.6, 8.0);
 
-// Cotas
-function dim(text, x, z, rot) {
-  const c = document.createElement('canvas'); c.width = 512; c.height = 128;
-  const g = c.getContext('2d'); g.textAlign='center'; g.textBaseline='middle';
-  g.fillStyle = '#1e293b'; g.font = '700 72px Inter, system-ui, sans-serif'; g.fillText(text, 256, 64);
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.3), new THREE.MeshBasicMaterial({ map:t, transparent:true, depthWrite:false }));
-  m.rotation.x = -Math.PI/2; m.rotation.z = rot; m.position.set(x, 0.01, z); labels.add(m);
+// ---------- Cotas (medidas) ----------
+// Linhas grossas no piso + etiquetas que sempre olham para a câmera e ficam por cima de tudo
+const dims = new THREE.Group(); house.add(dims);
+const dimMat = new THREE.MeshBasicMaterial({ color:0x1e293b });
+function dimText(text, x, z, big=false, onTop=true) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 160;
+  const g = c.getContext('2d');
+  g.fillStyle = '#ffffff'; g.strokeStyle = '#1e293b'; g.lineWidth = 8;
+  g.beginPath(); g.roundRect(8, 8, 496, 144, 60); g.fill(); g.stroke();
+  g.fillStyle = '#1e293b'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.font = '800 92px Inter, system-ui, sans-serif'; g.fillText(text, 256, 84);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map:t, depthTest:!onTop, depthWrite:false }));
+  const k = big ? 1.25 : 1;
+  sp.scale.set(1.15*k, 0.36*k, 1); sp.position.set(x, 0.35, z); sp.renderOrder = 10;
+  dims.add(sp);
 }
-function dimLine(z0, z1, x) {
-  const pts = [new THREE.Vector3(x, 0.01, z0), new THREE.Vector3(x, 0.01, z1)];
-  const mat = new THREE.LineBasicMaterial({ color:0x1e293b });
-  labels.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
-  for (const z of [z0, z1]) labels.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x-0.12,0.01,z), new THREE.Vector3(x+0.12,0.01,z)]), mat));
+// cota ao longo do comprimento (z), na linha x
+function dimZ(z0, z1, x, text, big) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.02, z1 - z0), dimMat);
+  m.position.set(x, 0.02, (z0+z1)/2); dims.add(m);
+  for (const z of [z0, z1]) { const t = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.02, 0.04), dimMat); t.position.set(x, 0.02, z); dims.add(t); }
+  dimText(text, x, (z0+z1)/2, big);
 }
-const DX = W + 0.6;
-dimLine(0, Z_BATH0, DX); dim('5,00 m', DX + 0.35, Z_BATH0/2, Math.PI/2);
-dimLine(Z_BATH0, Z_BATH1, DX); dim('1,50 m', DX + 0.35, (Z_BATH0+Z_BATH1)/2, Math.PI/2);
-dimLine(Z_BATH1, L, DX); dim('5,50 m', DX + 0.35, (Z_BATH1+L)/2, Math.PI/2);
-dimLine(0, L, DX + 1.0); dim('12,00 m', DX + 1.35, L/2, Math.PI/2);
-{
-  const mat = new THREE.LineBasicMaterial({ color:0x1e293b });
-  labels.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0.01,-0.6), new THREE.Vector3(W,0.01,-0.6)]), mat));
-  for (const x of [0, W]) labels.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,0.01,-0.72), new THREE.Vector3(x,0.01,-0.48)]), mat));
-  dim('4,00 m', W/2, -0.95, 0);
+// cota ao longo da largura (x), na linha z
+function dimX(x0, x1, z, text, big, onTop=true) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, 0.02, 0.04), dimMat);
+  m.position.set((x0+x1)/2, 0.02, z); dims.add(m);
+  for (const x of [x0, x1]) { const t = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.02, 0.3), dimMat); t.position.set(x, 0.02, z); dims.add(t); }
+  dimText(text, (x0+x1)/2, z, big, onTop);
 }
+// Lado esquerdo (o da entrada, visível na vista inicial)
+dimZ(0, Z_BATH0, -1.1, '5,00 m');
+dimZ(Z_BATH0, Z_BATH1, -1.1, '1,50 m');
+dimZ(Z_BATH1, L, -1.1, '5,50 m');
+dimZ(0, L, -2.4, '12,00 m', true);
+// Frente
+dimX(0, W, -0.9, '4,00 m', true);
+// Banheiro e passagem (no piso do quarto, logo abaixo do banheiro)
+dimX(T, X_BATH, Z_BATH1 + 0.45, '3,00 m', false, false);
+dimX(X_BATH, W - T, Z_BATH1 + 0.45, '1,00 m', false, false);
 
 // Etiquetas de esquadrias (sprites)
 function tag(text, color, x, y, z) {
@@ -420,15 +436,21 @@ tag('P3', '#b45309', X_BATH + 0.25, 2.35, 5.5);
 
 // ---------- Câmeras pré-definidas ----------
 const views = {
-  persp: { pos:[-10.5, 11, -9], target:[0.3, 0, 0.8] },
-  top:   { pos:[0.6, 21, 0.01], target:[0.6, 0, 0] },
-  front: { pos:[-8, 2.6, -5.2], target:[0, 1.2, -1.4] },
-  bath:  { pos:[-0.35, 6.2, 1.0], target:[-0.65, 0.2, -0.25] },
+  persp: { pos:[-12, 11.5, -9], target:[-0.4, 0, 0.6], k:1.4,
+           tall:{ pos:[-7, 12, -12.5], target:[-1.3, 0, 0.8], k:0.6 } },
+  top:   { pos:[-0.3, 23, 1.2], target:[-0.3, 0, 0.6], k:0.5,
+           tall:{ pos:[-0.9, 23, -1.0], target:[-0.9, 0, -1.6], k:0.55 } },
+  front: { pos:[-8, 2.6, -5.2], target:[0, 1.2, -1.4], k:1.2 },
+  bath:  { pos:[-0.35, 6.2, 1.0], target:[-0.65, 0.2, -0.25], k:0.8 },
 };
 let anim = null;
 function goTo(name, instant=false) {
-  const v = views[name];
-  const p = new THREE.Vector3(...v.pos), t = new THREE.Vector3(...v.target);
+  let v = views[name];
+  if (camera.aspect < 0.8 && v.tall) v = v.tall;
+  const t = new THREE.Vector3(...v.target);
+  // tela estreita (celular em pé): afasta a câmera para caber a casa inteira
+  const f = Math.max(1, v.k / camera.aspect);
+  const p = new THREE.Vector3(...v.pos).sub(t).multiplyScalar(f).add(t);
   if (instant) { camera.position.copy(p); controls.target.copy(t); controls.update(); return; }
   anim = { p0: camera.position.clone(), t0: controls.target.clone(), p, t, start: performance.now(), dur: 900 };
 }
@@ -452,6 +474,9 @@ document.getElementById('cut').addEventListener('click', e => {
     m.visible = true; m.scale.y = (top - y0)/(y1 - y0); m.position.y = (y0 + top)/2;
   }
   openingsObjs.forEach(o => o.visible = !low);
+});
+document.getElementById('medidas').addEventListener('click', e => {
+  dims.visible = !dims.visible; e.currentTarget.classList.toggle('on', dims.visible);
 });
 document.getElementById('labels').addEventListener('click', e => {
   labels.visible = !labels.visible; e.currentTarget.classList.toggle('on', labels.visible);
