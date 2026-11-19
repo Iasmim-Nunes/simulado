@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Planta 3D · 4,00 × 12,00 m</title>
+<title>Planta 3D · Cozinha, banheiro e quarto</title>
 <style>
   :root { --ink:#1e293b; --muted:#64748b; --line:#e2e8f0; --bg:#f8f8f6; }
   * { box-sizing:border-box; }
@@ -43,14 +43,14 @@
   <h1>Planta 3D</h1>
   <div class="sub">Edificação de 4,00 × 12,00 m · 48,00 m²</div>
   <table>
-    <tr><td><span class="sw" style="background:#d6b48a"></span>Ambiente 1</td><td>4,00 × 5,00 m</td></tr>
-    <tr><td><span class="sw" style="background:#bfe0f0"></span>Banheiro</td><td>2,70 × 1,50 m</td></tr>
-    <tr><td><span class="sw" style="background:#d6b48a"></span>Ambiente 2</td><td>4,00 × 5,50 m</td></tr>
+    <tr><td><span class="sw" style="background:#d6b48a"></span>Cozinha</td><td>4,00 × 5,00 m</td></tr>
+    <tr><td><span class="sw" style="background:#bfe0f0"></span>Banheiro</td><td>3,00 × 1,50 m</td></tr>
+    <tr><td><span class="sw" style="background:#d6b48a"></span>Quarto</td><td>4,00 × 5,50 m</td></tr>
     <tr><td><b>Comprimento total</b></td><td><b>12,00 m</b></td></tr>
   </table>
-  <p class="note">O banheiro ocupa o lugar do antigo cômodo (5,00 → 6,50 m), com passagem
-  de 1,30 m ao lado ligando os dois ambientes. O banheiro do fundo foi retirado: o
-  Ambiente 2 vai até o fim do lote. Pé-direito 2,80 m. Medidas de portas e janelas
+  <p class="note">Conforme o croqui: cozinha na frente, banheiro de 3,00 × 1,50 m no meio
+  (5,00 → 6,50 m) com passagem de 1,00 m ao lado, e quarto no fundo.
+  Pé-direito 2,80 m. Medidas de portas e janelas
   estimadas a partir do croqui.</p>
 </div>
 
@@ -70,9 +70,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // ---------- Medidas (metros) ----------
-// x: largura (0 = parede esquerda, das janelas) · z: comprimento (0 = frente / Ambiente 1)
+// x: largura (0 = parede esquerda, das janelas) · z: comprimento (0 = frente / cozinha)
 const W = 4.0, L = 12.0, H = 2.8, T = 0.15;          // largura, comprimento, pé-direito, espessura
-const Z_BATH0 = 5.0, Z_BATH1 = 6.5, X_BATH = 2.7;    // banheiro no lugar do cômodo
+const Z_BATH0 = 5.0, Z_BATH1 = 6.5, X_BATH = 3.0;    // banheiro 3,00 × 1,50 m
 const T_IN = 0.10;                                   // paredes internas
 
 const app = document.getElementById('app');
@@ -248,24 +248,23 @@ function floor(x0, z0, x1, z1, tex, y=0.005) {
 }
 // laje/base externa
 box(W + 0.3, 0.06, L + 0.3, new THREE.MeshStandardMaterial({ color:0xcfc9bc, roughness:1 }), W/2, -0.03, L/2, house, false);
-floor(0, 0, W, Z_BATH0, woodTex(2, 2.5));                           // Ambiente 1
+floor(0, 0, W, Z_BATH0, woodTex(2, 2.5));                           // Cozinha
 floor(0, Z_BATH0, X_BATH, Z_BATH1, tileTex(X_BATH/0.6, 1.5/0.6), 0.006); // Banheiro (cerâmica 60x60)
-floor(X_BATH, Z_BATH0, W, Z_BATH1, woodTex(0.65, 0.75));            // passagem
-floor(0, Z_BATH1, W, L, woodTex(2, 2.75));                          // Ambiente 2
+floor(X_BATH, Z_BATH0, W, Z_BATH1, woodTex(0.5, 0.75));             // passagem
+floor(0, Z_BATH1, W, L, woodTex(2, 2.75));                          // Quarto
 
 // ---------- Paredes externas ----------
-// Esquerda (x = 0): J1, P1 (entrada), J3 (basculante do banheiro), J2
+// Esquerda (x = 0): J1 (cozinha), P1 (entrada), J2 (quarto)
 wall('z', T/2, 0, L, T, [
   { a:1.10, b:2.50, bottom:1.00, top:2.10, kind:'window' },                       // J1 · 1,40 m
   { a:4.15, b:4.95, bottom:0,    top:2.10, kind:'door', hinge:'b', side:1 },     // P1 · 0,80 m (entrada)
-  { a:5.45, b:6.05, bottom:1.60, top:2.10, kind:'window', basculante:true },     // J3 · 0,60 m
   { a:8.30, b:9.80, bottom:1.00, top:2.10, kind:'window' },                       // J2 · 1,50 m
 ]);
 wall('z', W - T/2, 0, L, T);               // direita
 wall('x', T/2, T, W - T, T);               // frente
 wall('x', L - T/2, T, W - T, T);           // fundo
 
-// ---------- Banheiro (no lugar do cômodo) ----------
+// ---------- Banheiro ----------
 wall('x', Z_BATH0 + T_IN/2, T, X_BATH, T_IN, [], M.bathWall);                    // parede de cima
 wall('x', Z_BATH1 - T_IN/2, T, X_BATH, T_IN, [], M.bathWall);                    // parede de baixo
 wall('z', X_BATH - T_IN/2, Z_BATH0, Z_BATH1, T_IN, [
@@ -296,7 +295,7 @@ const bath = new THREE.Group(); house.add(bath);
 }
 // box de chuveiro — canto junto à porta
 {
-  const x0 = 1.85, x1 = X_BATH - T_IN, z1 = Z_BATH1 - T_IN;
+  const x0 = X_BATH - 0.85, x1 = X_BATH - T_IN, z1 = Z_BATH1 - T_IN;
   const glassW = new THREE.Mesh(new THREE.BoxGeometry(0.01, 1.9, 0.75), M.glass);
   glassW.position.set(x0, 0.97, z1 - 0.375); bath.add(glassW);
   box(0.03, 2.0, 0.03, M.metal, x0, 1.0, z1 - 0.75, bath);
@@ -307,6 +306,57 @@ const bath = new THREE.Group(); house.add(bath);
   // ralo
   const drain = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.005, 16), M.metal);
   drain.position.set((x0+x1)/2, 0.01, z1 - 0.37); bath.add(drain);
+}
+
+
+// ---------- Móveis ----------
+const F = {
+  white:  new THREE.MeshStandardMaterial({ color:0xf5f5f4, roughness:.5 }),
+  cab:    new THREE.MeshStandardMaterial({ color:0xd9cbb5, roughness:.7 }),
+  top:    new THREE.MeshStandardMaterial({ color:0x3f3f46, roughness:.4 }),
+  steel:  new THREE.MeshStandardMaterial({ color:0xc8ccd2, roughness:.25, metalness:.7 }),
+  black:  new THREE.MeshStandardMaterial({ color:0x111827, roughness:.4 }),
+  tableW: new THREE.MeshStandardMaterial({ color:0xa16b3c, roughness:.6 }),
+  linen:  new THREE.MeshStandardMaterial({ color:0xf1f5f9, roughness:.9 }),
+  blanket:new THREE.MeshStandardMaterial({ color:0x6b8fb5, roughness:.9 }),
+  wood:   new THREE.MeshStandardMaterial({ color:0x8b5e3c, roughness:.6 }),
+};
+const furn = new THREE.Group(); house.add(furn);
+// Cozinha — bancada em L junto à parede direita
+{
+  const xd = W - T - 0.3, z0 = 0.5, z1 = 3.0, zc = (z0+z1)/2;
+  box(0.6, 0.86, z1 - z0, F.cab, xd, 0.43, zc, furn);
+  box(0.62, 0.04, z1 - z0, F.top, xd, 0.88, zc, furn);
+  box(0.4, 0.02, 0.6, F.steel, xd, 0.905, 1.1, furn);                 // cuba
+  box(0.03, 0.25, 0.03, F.steel, W - T - 0.08, 1.02, 1.1, furn);      // torneira
+  box(0.5, 0.02, 0.55, F.black, xd, 0.905, 2.3, furn);                // cooktop
+  for (const dz of [-0.13, 0.13]) for (const dx of [-0.12, 0.12]) {
+    const r = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.008, 6, 20), F.steel);
+    r.rotation.x = Math.PI/2; r.position.set(xd + dx, 0.92, 2.3 + dz); furn.add(r);
+  }
+  box(0.35, 0.7, z1 - z0, F.cab, W - T - 0.175, 1.85, zc, furn);      // armário aéreo
+  box(0.7, 1.8, 0.7, F.white, W - T - 0.36, 0.9, 3.45, furn);          // geladeira
+  // mesa com 4 cadeiras
+  box(0.8, 0.04, 1.2, F.tableW, 1.6, 0.76, 2.4, furn);
+  for (const [dx, dz] of [[-0.33,-0.53],[0.33,-0.53],[-0.33,0.53],[0.33,0.53]]) box(0.04, 0.74, 0.04, F.tableW, 1.6+dx, 0.37, 2.4+dz, furn);
+  for (const [dx, dz] of [[-0.6,-0.3],[-0.6,0.3],[0.6,-0.3],[0.6,0.3]]) {
+    const cx = 1.6 + dx, cz = 2.4 + dz, back = dx < 0 ? -0.2 : 0.2;
+    box(0.42, 0.04, 0.42, F.wood, cx, 0.45, cz, furn);
+    box(0.04, 0.45, 0.42, F.wood, cx + back, 0.7, cz, furn);
+    for (const [ex, ez] of [[-0.18,-0.18],[0.18,-0.18],[-0.18,0.18],[0.18,0.18]]) box(0.03, 0.45, 0.03, F.wood, cx+ex, 0.225, cz+ez, furn);
+  }
+}
+// Quarto — cama de casal encostada no fundo, criados-mudos e guarda-roupa
+{
+  const bx = 2.0, bw = 1.4, bl = 1.9, bz1 = L - T, bz0 = bz1 - bl;
+  box(bw, 0.3, bl, F.wood, bx, 0.15, (bz0+bz1)/2, furn);
+  box(bw - 0.04, 0.2, bl - 0.04, F.linen, bx, 0.4, (bz0+bz1)/2, furn);
+  box(bw, 0.06, bl * 0.6, F.blanket, bx, 0.52, bz0 + bl*0.3, furn);
+  for (const dx of [-0.35, 0.35]) box(0.55, 0.12, 0.35, F.linen, bx + dx, 0.56, bz1 - 0.25, furn);
+  box(bw + 0.1, 1.0, 0.06, F.wood, bx, 0.5, bz1 - 0.03, furn);         // cabeceira
+  for (const dx of [-1.0, 1.0]) box(0.45, 0.5, 0.4, F.cab, bx + dx * (bw/2 + 0.3), 0.25, bz1 - 0.2, furn);
+  box(0.6, 2.2, 1.8, F.cab, W - T - 0.3, 1.1, 8.3, furn);              // guarda-roupa
+  box(0.01, 2.1, 0.01, F.black, W - T - 0.6, 1.1, 8.3, furn);
 }
 
 // ---------- Rótulos no piso ----------
@@ -322,9 +372,9 @@ function label(text, sub, x, z, scale=1, rot=0) {
   m.rotation.x = -Math.PI/2; m.rotation.z = rot; m.position.set(x, 0.02, z); m.renderOrder = 2;
   labels.add(m);
 }
-label('AMBIENTE 1', '20,00 m²', W/2, 2.5);
-label('BANHEIRO', '1,50 m', X_BATH/2 - 0.35, 5.75, 0.45);
-label('AMBIENTE 2', '22,00 m²', W/2, 9.25);
+label('COZINHA', '20,00 m²', 1.6, 0.95);
+label('BANHEIRO', '3,00 × 1,50 m', X_BATH/2 - 0.2, 5.75, 0.5);
+label('QUARTO', '22,00 m²', 1.6, 8.0);
 
 // Cotas
 function dim(text, x, z, rot) {
@@ -365,7 +415,6 @@ function tag(text, color, x, y, z) {
 }
 tag('J1', '#2b5fd9', -0.35, 1.55, 1.8);
 tag('P1', '#b45309', -0.35, 2.35, 4.55);
-tag('J3', '#2b5fd9', -0.35, 1.85, 5.75);
 tag('J2', '#2b5fd9', -0.35, 1.55, 9.05);
 tag('P3', '#b45309', X_BATH + 0.25, 2.35, 5.5);
 
