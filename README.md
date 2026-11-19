@@ -38,3 +38,9 @@ g++ -Wall -o solucoes solucoes.cpp
 ## Publicar no GitHub Pages
 
 Em **Settings > Pages**, selecione Source: *Deploy from a branch*, branch `main` e pasta `/ (root)`.
+
+## planta-3d.html
+
+Modelo 3D interativo (Three.js) da planta de 4,00 × 12,00 m: Ambiente 1 (5,00 m),
+banheiro no lugar do antigo cômodo (1,50 m) e Ambiente 2 (5,50 m), somando 12,00 m.
+Abra pelo GitHub Pages em `/planta-3d.html` (precisa de internet para carregar o Three.js).
